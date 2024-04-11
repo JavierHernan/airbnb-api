@@ -186,38 +186,69 @@
 
   Table spots {
   id integer [primary key]
+  ownerId integer
+  address varchar
+  city varchar
+  state varchar
+  country varchar
+  lat float
+  lng float
+  name varchar
+  description varchar
+  price float
+  createdAt date
+  updatedAt date
+  avgRating float
+  previewImage varchar?
+  booking_start
+  booking_end
   created_at timestamp
 }
 
 Table users {
     id integer [primary key]
+    firstName varchar
+    lastName varchar
+    email varchar
+    username varchar
     created_at timestamp
+    updated_at timestamp
 }
 
 Table reviews {
     id integer [primary key]
+    review varchar
+    stars float
+    created_at timestamp
+    updated_at timestamp
     spot_id integer
     user_id integer
-    created_at timestamp
 }
 
 Table bookings {
     id integer [primary key]
     spot_id integer
+    start_date timestamp
+    end_date timestamp
     user_id integer
     created_at timestamp
+    updated_at timestamp
 }
 
 Table review_images {
     id integer [primary key]
+    url varchar
     review_id integer
     created_at timestamp
+    updated_at timestamp
 }
 
 Table spot_images {
     id integer [primary key]
+    url varchar
     spot_id integer
     created_at timestamp
+    updated_at timestamp
 }
 
 Ref: spots.id < spot_images.spot_id
