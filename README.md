@@ -1,104 +1,5 @@
 # airbnb-api
 
-    
-  
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-  Table spots {
-  id integer [primary key]
-  ownerId integer
-  address varchar
-  city varchar
-  state varchar
-  country varchar
-  lat float
-  lng float
-  name varchar
-  description varchar
-  price float
-  createdAt date
-  updatedAt date
-  avgRating float
-  previewImage varchar?
-  booking_start
-  booking_end
-  created_at timestamp
-}
-
-Table users {
-    id integer [primary key]
-    firstName varchar
-    lastName varchar
-    email varchar
-    username varchar
-    created_at timestamp
-    updated_at timestamp
-}
-
-Table reviews {
-    id integer [primary key]
-    review varchar
-    stars float
-    created_at timestamp
-    updated_at timestamp
-    spot_id integer
-    user_id integer
-}
-
-Table bookings {
-    id integer [primary key]
-    spot_id integer
-    start_date timestamp
-    end_date timestamp
-    user_id integer
-    created_at timestamp
-    updated_at timestamp
-}
-
-Table review_images {
-    id integer [primary key]
-    url varchar
-    review_id integer
-    created_at timestamp
-    updated_at timestamp
-}
-
-Table spot_images {
-    id integer [primary key]
-    url varchar
-    spot_id integer
-    created_at timestamp
-    updated_at timestamp
-}
-
-Ref: spots.id < spot_images.spot_id
-Ref: spots.id < bookings.spot_id
-Ref: spots.id < reviews.spot_id
-Ref: reviews.id < review_images.review_id
-Ref: users.id < bookings.user_id
-Ref: users.id < reviews.user_id
-
 # `<name of application here>`
 
 ## Database Schema Design
@@ -486,7 +387,7 @@ Returns the details of a spot specified by its id.
   * Body: none
 
     {
-    "endpoint": "details of a spot, specified by it's id",
+    "endpoint": "details of a spot, specified by its id",
     "request": {
       "method": "GET",
       "URL": "/spots/:spot"
@@ -955,7 +856,7 @@ Create and return a new review for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: "POST"
-  * URL: "/spots/:spot/reviews/:review"
+  * URL: "/reviews/:review"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -966,13 +867,13 @@ Create and return a new review for a spot specified by id.
       "stars": 5,
     }
     ```
-  {
-    "endpoint": "create and return new review for a spot specified by spot id",
+  <!-- {
+    "endpoint": "create and return new review for a spot specified by review id",
     "request": {
       "method": "POST",
       "URL": "/spots/:spot/reviews/:review"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 201
@@ -1104,7 +1005,7 @@ Update and return an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: "PUT"
-  * URL: "/:user/reviews/:review"
+  * URL: "/reviews/:review"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1115,13 +1016,13 @@ Update and return an existing review.
       "stars": 5,
     }
     ```
-      {
+      <!-- {
     "endpoint": "update and return existing review by current user",
     "request": {
       "method": "PUT",
       "URL": "/:user/reviews/:review"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1274,16 +1175,16 @@ Return all the bookings for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: "GET"
-  * URL: "/:spot/bookings"
+  * URL: "/spots/:spot/bookings"
   * Body: none
 
-      {
+      <!-- {
     "endpoint": "return all bookings for a spot specified by spot id",
     "request": {
       "method": "GET",
-      "URL": "/:spot/bookings"
+      "URL": "/spots/:spot/bookings"
     }
-  }
+  } -->
 
 * Successful Response: If you ARE NOT the owner of the spot.
   * Status Code: 200
@@ -1350,7 +1251,7 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: "POST"
-  * URL: "/:user/bookings/:booking"
+  * URL: "/bookings/:booking"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1362,13 +1263,13 @@ Create and return a new booking from a spot specified by id.
     }
     ```
 
-      {
+      <!-- {
     "endpoint": "create and return a new booking for a spot by current user specified by spot id",
     "request": {
       "method": "POST",
       "URL": "/:user/bookings/:booking"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1440,7 +1341,7 @@ Update and return an existing booking.
 * Require proper authorization: Booking must belong to the current user
 * Request
   * Method: "PUT"
-  * URL: "/:user/bookings/:booking"
+  * URL: "/bookings/:booking"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1452,13 +1353,13 @@ Update and return an existing booking.
     }
     ```
 
-     {
+     <!-- {
     "endpoint": "update and return an existing booking",
     "request": {
       "method": "PUT",
       "URL": "/:user/bookings/:booking"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1543,17 +1444,17 @@ Delete an existing booking.
   Spot must belong to the current user
 * Request
   * Method: "DELETE"
-  * URL: "/:user/bookings/:booking"
+  * URL: "/bookings/:booking"
   * Body: none
 
 
-    {
+    <!-- {
     "endpoint": "delete an existing booking",
     "request": {
       "method": "DELETE",
       "URL": "/:user/bookings/:booking"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1601,16 +1502,16 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: "DELETE"
-  * URL: "/:spot/images/:image"
+  * URL: "/images/:image"
   * Body: none
 
-      {
+      <!-- {
     "endpoint": "delete an existing image for a spot owned by current user",
     "request": {
       "method": "DELETE",
       "URL": "/:spot/images/:image"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1644,16 +1545,16 @@ Delete an existing image for a Review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: "DELETE"
-  * URL: "/:user/reviews/:review/:image"
+  * URL: "/images/:image"
   * Body: none
 
-{
+<!-- {
     "endpoint": "delelte an existing image review owned by current user",
     "request": {
       "method": "DELETE",
       "URL": "/:user/reviews/:review/:image"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
