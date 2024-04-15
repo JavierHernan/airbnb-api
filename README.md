@@ -55,7 +55,7 @@ correct role(s) or permission(s).
     "endpoint": "requires authentification and user does not have correct permissions",
     "request": {
       "method": "GET",
-      "URL": "/login/error"
+      "URL": "/error"
 
     }
   }
@@ -67,7 +67,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: "GET"
-  * URL: "/login/:user"
+  * URL: "/:current"
   * Body: none
 
   {
@@ -115,8 +115,8 @@ information.
 
 * Require Authentication: false
 * Request
-  * Method: "GET"
-  * URL: "/login/:user"
+  * Method: "POST"
+  * URL: "/session"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -189,7 +189,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: "POST"
-  * URL: "/login/:user"
+  * URL: "/users"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -203,13 +203,13 @@ user's information.
       "password": "secret password"
     }
     ```
-   {
+   <!-- {
     "endpoint": "creates new user, logs in as current user, returns user info",
     "request": {
       "method": "POST",
       "URL": "/login/:user"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -335,16 +335,16 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: "GET"
-  * URL: "/login/:user/spots"
+  * URL: "/spots/:current"
   * Body: none
 
-    {
+    <!-- {
     "endpoint": "returns all spots created by current user",
     "request": {
       "method": "GET",
-      "URL": "/login/:user/spots"
+      "URL": "/login/:current/spots"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -456,7 +456,7 @@ Creates and returns a new spot.
 * Require Authentication: true
 * Request
   * Method: "POST"
-  * URL: "/spots/:spot"
+  * URL: "/spots"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -475,13 +475,13 @@ Creates and returns a new spot.
     }
     ```
 
-      {
+      <!-- {
     "endpoint": "creates and returns a new spot",
     "request": {
       "method": "POST",
       "URL": "/spots/:spot"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 201
@@ -538,7 +538,7 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: "POST"
-  * URL: "/spots/:spot/image"
+  * URL: "/:spot/images"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -549,13 +549,13 @@ Create and return a new image for a spot specified by id.
       "preview": true
     }
     ```
-      {
+      <!-- {
     "endpoint": "creates and returns new image for spot by id",
     "request": {
       "method": "POST",
-      "URL": "/spots/:spot/image"
+      "URL": "/:spot/image"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -591,7 +591,7 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: "PUT"
-  * URL: "/spots/:spot"
+  * URL: "/spots/:spot/:current"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -684,7 +684,7 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: "DELETE"
-  * URL: "/spots/:spot"
+  * URL: "/spots/:spot/:current"
   * Body: none
 
       {
@@ -728,16 +728,16 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: "GET"
-  * URL: "/:user/reviews"
+  * URL: "/:current/reviews"
   * Body: none
 
-     {
+     <!-- {
     "endpoint": "returns all reviews by current user",
     "request": {
       "method": "GET",
-      "URL": "/:user/reviews"
+      "URL": "/:current/reviews"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -856,7 +856,7 @@ Create and return a new review for a spot specified by id.
 * Require Authentication: true
 * Request
   * Method: "POST"
-  * URL: "/reviews/:review"
+  * URL: "/:spot/reviews"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -941,7 +941,7 @@ Create and return a new image for a review specified by id.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: "POST"
-  * URL: "/:review/image"
+  * URL: "/:review/images"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -951,13 +951,13 @@ Create and return a new image for a review specified by id.
       "url": "image url"
     }
     ```
-      {
+      <!-- {
     "endpoint": "create and return new image for a review specified by review id",
     "request": {
       "method": "POST",
       "URL": "/:review/image"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1005,7 +1005,7 @@ Update and return an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: "PUT"
-  * URL: "/reviews/:review"
+  * URL: "/reviews/:review/:current"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1078,16 +1078,16 @@ Delete an existing review.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: "DELETE"
-  * URL: "/:user/reviews/:review"
+  * URL: "/reviews/:review/:current"
   * Body: none
 
-      {
+      <!-- {
     "endpoint": "delete an existing review owned by current user",
     "request": {
       "method": "DELETE",
       "URL": "/:user/reviews/:review"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1122,7 +1122,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: "GET"
-  * URL: "/:user/bookings"
+  * URL: "/:current/bookings"
   * Body: none
 
       {
@@ -1251,7 +1251,7 @@ Create and return a new booking from a spot specified by id.
 * Require proper authorization: Spot must NOT belong to the current user
 * Request
   * Method: "POST"
-  * URL: "/bookings/:booking"
+  * URL: "/:current/bookings"
   * Headers:
     * Content-Type: application/json
   * Body:
