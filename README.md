@@ -1,7 +1,5 @@
 # airbnb-api
 
-# `<name of application here>`
-
 ## Database Schema Design
 
 `<insert database schema design here>`
@@ -591,7 +589,7 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: "PUT"
-  * URL: "/spots/:spot/:current"
+  * URL: "/spots/:spot"
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -684,7 +682,7 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: "DELETE"
-  * URL: "/spots/:spot/:current"
+  * URL: "/spots/:spot"
   * Body: none
 
       {
@@ -1122,7 +1120,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: "GET"
-  * URL: "/:current/bookings"
+  * URL: "/bookings/:current"
   * Body: none
 
       {
