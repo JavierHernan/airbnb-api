@@ -66,15 +66,16 @@ Returns the information about the current user that is logged in.
 * Request
   * Method: "GET"
   * URL: "/:current"
+  * Route path: /api/session
   * Body: none
 
-  {
+  <!-- {
     "endpoint": "user has logged in",
     "request": {
       "method": "GET",
       "URL": "/login/:user"
     }
-  }
+  } -->
 
 * Successful Response when there is a logged in user
   * Status Code: 200
@@ -115,6 +116,7 @@ information.
 * Request
   * Method: "POST"
   * URL: "/session"
+  * Route path: /api/session
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -125,13 +127,13 @@ information.
       "password": "secret password"
     }
     ```
-  {
+  <!-- {
     "endpoint": "user has logged in",
     "request": {
       "method": "GET",
       "URL": "/login/:user"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -188,6 +190,7 @@ user's information.
 * Request
   * Method: "POST"
   * URL: "/users"
+  * Route path: /api/users
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -285,15 +288,16 @@ Returns all the spots.
 * Request
   * Method: "GET"
   * URL: "/spots"
+  * Route path: /api/spots
   * Body: none
 
-{
+<!-- {
     "endpoint": "returns all spots",
     "request": {
         "method": "GET",
         "URL": "/spots"
     }
-}
+} -->
     
 
 * Successful Response
@@ -334,6 +338,7 @@ Returns all the spots owned (created) by the current user.
 * Request
   * Method: "GET"
   * URL: "/spots/:current"
+  * Route path: /api/spots/current
   * Body: none
 
     <!-- {
@@ -382,15 +387,16 @@ Returns the details of a spot specified by its id.
 * Request
   * Method: "GET"
   * URL: "/spots/:spot"
+  * Route path: /api/spots/:spotId
   * Body: none
 
-    {
+    <!-- {
     "endpoint": "details of a spot, specified by its id",
     "request": {
       "method": "GET",
       "URL": "/spots/:spot"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -455,6 +461,7 @@ Creates and returns a new spot.
 * Request
   * Method: "POST"
   * URL: "/spots"
+  * Route path: /api/spots
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -537,6 +544,7 @@ Create and return a new image for a spot specified by id.
 * Request
   * Method: "POST"
   * URL: "/:spot/images"
+  * Route path: /api/spots/:spotId/images
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -590,6 +598,7 @@ Updates and returns an existing spot.
 * Request
   * Method: "PUT"
   * URL: "/spots/:spot"
+  * Route path: /api/spots/:spotId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -607,13 +616,13 @@ Updates and returns an existing spot.
       "price": 123
     }
     ```
-      {
+      <!-- {
     "endpoint": "updates and return existing spot",
     "request": {
       "method": "PUT",
       "URL": "/spots/:spot"
     }
-  }
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -683,6 +692,7 @@ Deletes an existing spot.
 * Request
   * Method: "DELETE"
   * URL: "/spots/:spot"
+  * Route path: /api/spots/:spotId
   * Body: none
 
       {
@@ -727,6 +737,7 @@ Returns all the reviews written by the current user.
 * Request
   * Method: "GET"
   * URL: "/:current/reviews"
+  * Route path: /api/reviews/current
   * Body: none
 
      <!-- {
@@ -791,16 +802,16 @@ Returns all the reviews that belong to a spot specified by id.
 * Request
   * Method: "GET"
   * URL: "/spots/:spot/reviews"
+  * Route path: /api/spots/:spotId/reviews
   * Body: none
 
-  {
+  <!-- {
     "endpoint": "returns reviews for spot by spot id",
     "request": {
       "method": "GET",
       "URL": "/spots/:spot/reviews"
     }
-  }
-
+  } -->
 
 * Successful Response
   * Status Code: 200
@@ -855,6 +866,7 @@ Create and return a new review for a spot specified by id.
 * Request
   * Method: "POST"
   * URL: "/:spot/reviews"
+  * Route path: /api/spots/:spotId/reviews
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -940,6 +952,7 @@ Create and return a new image for a review specified by id.
 * Request
   * Method: "POST"
   * URL: "/:review/images"
+  * Route path: /api/reviews/:reviewId/images
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1004,6 +1017,7 @@ Update and return an existing review.
 * Request
   * Method: "PUT"
   * URL: "/reviews/:review/:current"
+  * Route path: /api/reviews/:reviewId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1077,6 +1091,7 @@ Delete an existing review.
 * Request
   * Method: "DELETE"
   * URL: "/reviews/:review/:current"
+  * Route path: /api/reviews/:reviewId
   * Body: none
 
       <!-- {
@@ -1121,15 +1136,8 @@ Return all the bookings that the current user has made.
 * Request
   * Method: "GET"
   * URL: "/bookings/:current"
+  * Route path: /api/bookings/current
   * Body: none
-
-      {
-    "endpoint": "return all bookings current user has made",
-    "request": {
-      "method": "GET",
-      "URL": "/:user/bookings"
-    }
-  }
 
 * Successful Response
   * Status Code: 200
@@ -1174,15 +1182,8 @@ Return all the bookings for a spot specified by id.
 * Request
   * Method: "GET"
   * URL: "/spots/:spot/bookings"
+  * Route path: /api/spots/:spotId/bookings
   * Body: none
-
-      <!-- {
-    "endpoint": "return all bookings for a spot specified by spot id",
-    "request": {
-      "method": "GET",
-      "URL": "/spots/:spot/bookings"
-    }
-  } -->
 
 * Successful Response: If you ARE NOT the owner of the spot.
   * Status Code: 200
@@ -1250,6 +1251,7 @@ Create and return a new booking from a spot specified by id.
 * Request
   * Method: "POST"
   * URL: "/:current/bookings"
+  * Route path: /api/spots/:spotId/bookings
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1260,14 +1262,6 @@ Create and return a new booking from a spot specified by id.
       "endDate": "2021-11-20"
     }
     ```
-
-      <!-- {
-    "endpoint": "create and return a new booking for a spot by current user specified by spot id",
-    "request": {
-      "method": "POST",
-      "URL": "/:user/bookings/:booking"
-    }
-  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1340,6 +1334,7 @@ Update and return an existing booking.
 * Request
   * Method: "PUT"
   * URL: "/bookings/:booking"
+  * Route path: /api/bookings/:bookingId
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1443,6 +1438,7 @@ Delete an existing booking.
 * Request
   * Method: "DELETE"
   * URL: "/bookings/:booking"
+  * Route path: /api/bookings/:bookingId
   * Body: none
 
 
@@ -1501,15 +1497,8 @@ Delete an existing image for a Spot.
 * Request
   * Method: "DELETE"
   * URL: "/images/:image"
+  * Route path: /api/spot-images/:imageId
   * Body: none
-
-      <!-- {
-    "endpoint": "delete an existing image for a spot owned by current user",
-    "request": {
-      "method": "DELETE",
-      "URL": "/:spot/images/:image"
-    }
-  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1544,15 +1533,8 @@ Delete an existing image for a Review.
 * Request
   * Method: "DELETE"
   * URL: "/images/:image"
+  * Route path: /api/review-images/:imageId
   * Body: none
-
-<!-- {
-    "endpoint": "delelte an existing image review owned by current user",
-    "request": {
-      "method": "DELETE",
-      "URL": "/:user/reviews/:review/:image"
-    }
-  } -->
 
 * Successful Response
   * Status Code: 200
@@ -1586,6 +1568,7 @@ Return spots filtered by query parameters.
 * Request
   * Method: "GET"
   * URL: "/spots/:filtered"
+  * Route path: /api/spots
   * Query Parameters
     * page: integer, minimum: 1, default: 1
     * size: integer, minimum: 1, maximum: 20, default: 20
