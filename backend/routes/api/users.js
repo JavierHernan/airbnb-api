@@ -22,6 +22,9 @@ const { handleValidationErrors } = require('../../utils/validation');
       .not()
       .isEmail()
       .withMessage('Username cannot be an email.'),
+    check('username')
+      .exists({checkFalsy: true})
+      .withMessage("user already exists"),
     check('password')
       .exists({ checkFalsy: true })
       .isLength({ min: 6 })
