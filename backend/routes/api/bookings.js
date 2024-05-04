@@ -11,31 +11,6 @@ const router = express.Router();
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-// //create a booking form a Spot based on Spot.id
-// router.post(
-//     '/:spotId/bookings',
-//     requireAuth,
-//     async (req, res) => {
-//         //grab spot by req.params
-//         // const spotId = parseInt(req.params.spotId);
-//         const {spotId} = req.params;
-//         const {userId, startDate, endDate} = req.body;
-//         console.log("spotId", spotId)
-//         console.log("userId, startDate, endDate", userId, startDate, endDate)
-//         //find the actual spot
-//         const spot = await Spot.findByPk(spotId)
-
-//         //create Booking
-//         const newBooking = await Booking.create({
-//             spot_id: spotId,
-//             user_id: userId,
-//             startDate,
-//             endDate
-//         })
-
-//         return res.status(200).json(newBooking)
-//     }
-// )
 
 //get all of current User's Bookings
 router.get(
