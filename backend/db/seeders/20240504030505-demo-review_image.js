@@ -22,7 +22,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    options.tableName = 'Review_Image';
+    options.tableName = 'Review_Images';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       review_id: { [Op.in]: [1, 2] }
