@@ -21,11 +21,11 @@ module.exports = {
       },
       spot_id: {
         type: Sequelize.INTEGER,
-        references: {model: "Spots"}
+        references: {model: "Spots", key: "id"}
       },
       user_id: {
         type: Sequelize.INTEGER,
-        references: {model: "Users"}
+        references: {model: "Users", key: 'id'}
       },
       createdAt: {
         allowNull: false,
