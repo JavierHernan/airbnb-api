@@ -172,7 +172,7 @@ router.post(
 
         //check if current user is spot owner
         if(spot.owner_id !== req.user.id) {
-            return res.status(403).json({message: "Spot must belong to current User"})
+            return res.status(401).json({message: "Spot must belong to current User"})
         }
 
         const createImage = await Spot_Image.create({
@@ -324,7 +324,7 @@ router.put(
             return res.status(404).json({message: "Spot couldn't be found"})
         }
         if(spot.owner_id !== req.user.id) {
-            return res.status(403).json({message: "Spot must belong to current User"})
+            return res.status(401).json({message: "Spot must belong to current User"})
         }
         if(name.length > 50) {
             return res.status(400).json({
@@ -352,7 +352,7 @@ router.delete(
             return res.status(404).json({message: "Spot couldn't be found"})
         }
         if(spot.owner_id !== req.user.id) {
-            return res.status(403).json({message: "Spot must belong to current User"})
+            return res.status(401).json({message: "Spot must belong to current User"})
         }
 
         const reviews = await Review.findAll({

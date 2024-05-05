@@ -106,7 +106,7 @@ router.post(
             where: {review_id: reviewId}
         })
         if(count > 10) {
-            return res.status(403).json({message: "Maximum number of images for this resource was reached"})
+            return res.status(401).json({message: "Maximum number of images for this resource was reached"})
         }
         const reviewImage = await Review_Image.create({
             review_id: reviewId,
@@ -150,7 +150,7 @@ router.put(
         //grab review to update, can't be const because of reassign
         let review = await Review.findByPk(reviewId)
         if(review.user_id !== req.user.id) {
-            return res.status(403).json({message: "Review must belong to current User"})
+            return res.status(401).json({message: "Review must belong to current User"})
         }
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
@@ -172,7 +172,7 @@ router.delete(
         //get actual review by id
         const review = await Review.findByPk(reviewId)
         if(review.user_id !== req.user.id) {
-            return res.status(403).json({message: "Review must belong to current User"})
+            return res.status(401).json({message: "Review must belong to current User"})
         }
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
