@@ -18,7 +18,10 @@ module.exports = {
       },
       review_id: {
         type: Sequelize.INTEGER,
-        references: {model: "Reviews"}
+        references: {
+          model: "Reviews", 
+          key: "id", 
+          onDelete: "CASCADE"}
       },
       createdAt: {
         allowNull: false,

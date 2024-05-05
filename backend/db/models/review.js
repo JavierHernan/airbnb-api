@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       // Team.hasMany(models.Review_Image, {foreignKey: "review_id"}) for bookings?
-      Review.belongsTo(models.Spot, {foreignKey: "spot_id"}),
+      Review.belongsTo(models.Spot, {foreignKey: "spot_id", onDelete: "CASCADE"}),
       Review.belongsTo(models.User, {foreignKey: "user_id"}),
-      Review.hasMany(models.Review_Image, {foreignKey: "review_id"})
+      Review.hasMany(models.Review_Image, {foreignKey: "review_id", onDelete: "CASCADE"})
     }
   }
   Review.init({

@@ -24,6 +24,12 @@ router.delete(
         if(!image) {
             return res.status(404).json({message: "Spot Image couldn't be found"})
         }
+        console.log("image", image)
+        const spot = await Spot.findByPk(image.spot_id)
+        console.log("spot.owner_id", spot.owner_id)
+        if (spot.owner_id !== req.user.id) {
+            return res.status(401).json({ message: "User must own Spot to delete the Spot Image" });
+        }
 
         await image.destroy()
         return res.status(200).json({message: "Successfully deleted"})

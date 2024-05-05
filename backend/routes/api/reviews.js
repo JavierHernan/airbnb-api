@@ -17,7 +17,7 @@ router.get(
     requireAuth,
     async(req,res,next) => {
         const id = req.user.id;
-        const getAll = await Review.findAll({
+        const reviews = await Review.findAll({
             where: {user_id: id},
             include: [
                 {
@@ -55,7 +55,34 @@ router.get(
                 }
             ]
         })
-        return res.status(200).json(getAll)
+        const response = {
+            Reviews: reviews.map(
+                review => ({
+                    id: review.id,
+                    userId: review.user_id,
+                    spotId: review.spot_id,
+                    review: review.review,
+                    stars: review.stars,
+                    createdAt: review.createdAt,
+                    updatedAt: review.updatedAt,
+                    User: review.User,
+                    Spot: {
+                        id: review.Spot.id,
+                        ownerId: review.Spot.owner_id,
+                        address: review.Spot.address,
+                        city: review.Spot.city,
+                        state: review.Spot.state,
+                        country: review.Spot.country,
+                        lat: review.Spot.lat,
+                        lng: review.Spot.lng,
+                        name: review.Spot.name,
+                        price: review.Spot.price,
+                        previewImage: review.Spot.Spot_Images.length > 0 ? review.Spot.Spot_Images[0].url : null
+                    },
+                    ReviewImages: review.Review_Images
+                }))
+        }
+        return res.status(200).json(response)
     }
     
 )
@@ -75,7 +102,12 @@ router.post(
         if(!findReview) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
-
+        const count = await Review_Image.count({
+            where: {review_id: reviewId}
+        })
+        if(count > 10) {
+            return res.status(403).json({message: "Maximum number of images for this resource was reached"})
+        }
         const reviewImage = await Review_Image.create({
             review_id: reviewId,
             url
@@ -87,12 +119,6 @@ router.post(
             }
         )
 
-        const count = await Review_Image.count({
-            where: {review_id: reviewId}
-        })
-        if(count > 10) {
-            return res.status(403).json({message: "Maximum number of images for this resource was reached"})
-        }
         const response = {
             id: reviewImage.id,
             url: reviewImage.url
@@ -123,6 +149,9 @@ router.put(
         const reviewId = parseInt(req.params.reviewId, 10)
         //grab review to update, can't be const because of reassign
         let review = await Review.findByPk(reviewId)
+        if(review.user_id !== req.user.id) {
+            return res.status(403).json({message: "Review must belong to current User"})
+        }
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
@@ -142,10 +171,23 @@ router.delete(
 
         //get actual review by id
         const review = await Review.findByPk(reviewId)
+        if(review.user_id !== req.user.id) {
+            return res.status(403).json({message: "Review must belong to current User"})
+        }
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
-
+        //DELETE REVIEW IMAGES ASSOCIATED WITH REVIEW FIRST ONDELETE:CASCADE ISN"T WORKING
+        const reviewImages = await Review_Image.findAll({ where: { review_id: review.id } });
+        // await reviewImages.destroy()
+        // await reviewImages.map(async (reviewImage) => {
+        //     await reviewImage.destroy():
+        // })
+        //Must Promise and await for each image to destroy before next
+        await Promise.all(reviewImages.map(async (reviewImage) => {
+            await reviewImage.destroy();
+        }));
+        
         await review.destroy()
         return res.status(200).json({message: "Successfully deleted"})
     }

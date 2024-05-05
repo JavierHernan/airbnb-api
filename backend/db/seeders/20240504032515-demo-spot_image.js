@@ -27,9 +27,14 @@ module.exports = {
     },
     {
       url: 'www.another-spot_image_url.com',
-      spot_id: 1,
+      spot_id: 2,
       preview: true
-    }
+    },
+    {
+      url: 'www.3spot_image_url.com',
+      spot_id: 3,
+      preview: true
+    },
    ], {validate: true})
   },
 
