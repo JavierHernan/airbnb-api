@@ -9,7 +9,9 @@ const handleValidationErrors = (req, _res, next) => {
     const errors = {};
     validationErrors
       .array()
-      .forEach(error => errors[error.path] = error.msg);
+      // .forEach(error => errors[error.path] = error.msg);
+      .forEach(error => errors[error.param] = error.msg);
+
 
       delete errors.stack;
       delete errors.title;
@@ -22,6 +24,7 @@ const handleValidationErrors = (req, _res, next) => {
   }
   next();
 };
+
 
 module.exports = {
   handleValidationErrors
