@@ -24,7 +24,7 @@ router.delete(
         // console.log("image", image)
         // console.log("image.user_id", image.user_id)
         const reviewId = image.dataValues.reviewId;
-        const review = await Review.findByPk(reviewId)
+        const review = await Review.findByPk(image.reviewId)
         if(!image) {
             return res.status(404).json({message: "Spot image couldn't be found"})
         }

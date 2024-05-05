@@ -173,7 +173,7 @@ router.post(
 
         //check if current user is spot owner
         if(spot.ownerId !== req.user.id) {
-            return res.status(40).json({message: "Spot must belong to current User"})
+            return res.status(401).json({message: "Spot must belong to current User"})
         }
 
         const createImage = await Spot_Image.create({
@@ -209,7 +209,8 @@ router.get(
                     attributes: [
                         [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
                     ],
-                    // as: 'Reviews'
+                    // as: 'Reviews',
+                    required: false
                 },
                 {
                     model: Spot_Image,

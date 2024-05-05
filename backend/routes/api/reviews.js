@@ -149,13 +149,13 @@ router.put(
         const reviewId = parseInt(req.params.reviewId, 10)
         //grab review to update, can't be const because of reassign
         let review = await Review.findByPk(reviewId)
-        if(review.userId !== req.user.id) {
-            return res.status(401).json({message: "Review must belong to current User"})
-        }
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
-
+        if(review.userId !== req.user.id) {
+            return res.status(401).json({message: "Review must belong to current User"})
+        }
+        
         review = await review.update(update)
         return res.status(200).json(review)
     }
