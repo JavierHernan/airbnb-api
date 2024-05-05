@@ -18,7 +18,7 @@ router.get(
     async(req,res,next) => {
         const id = req.user.id;
         const reviews = await Review.findAll({
-            where: {user_id: id},
+            where: {userId: id},
             include: [
                 {
                     model: User,
@@ -32,7 +32,7 @@ router.get(
                     model: Spot,
                     attributes: [
                         'id',
-                        'owner_id',
+                        'ownerId',
                         'address',
                         'city',
                         'state',
@@ -59,8 +59,8 @@ router.get(
             Reviews: reviews.map(
                 review => ({
                     id: review.id,
-                    userId: review.user_id,
-                    spotId: review.spot_id,
+                    userId: review.userId,
+                    spotId: review.spotId,
                     review: review.review,
                     stars: review.stars,
                     createdAt: review.createdAt,
@@ -68,7 +68,7 @@ router.get(
                     User: review.User,
                     Spot: {
                         id: review.Spot.id,
-                        ownerId: review.Spot.owner_id,
+                        ownerId: review.Spot.ownerId,
                         address: review.Spot.address,
                         city: review.Spot.city,
                         state: review.Spot.state,
@@ -103,18 +103,18 @@ router.post(
             return res.status(404).json({message: "Review couldn't be found"})
         }
         const count = await Review_Image.count({
-            where: {review_id: reviewId}
+            where: {reviewId: reviewId}
         })
         if(count > 10) {
             return res.status(403).json({message: "Maximum number of images for this resource was reached"})
         }
         const reviewImage = await Review_Image.create({
-            review_id: reviewId,
+            reviewId: reviewId,
             url
         },
             {
                 attributes: {
-                    exlude: ['createdAt', 'updatedAt', 'review_id']
+                    exlude: ['createdAt', 'updatedAt', 'reviewId']
                 }
             }
         )
@@ -149,7 +149,7 @@ router.put(
         const reviewId = parseInt(req.params.reviewId, 10)
         //grab review to update, can't be const because of reassign
         let review = await Review.findByPk(reviewId)
-        if(review.user_id !== req.user.id) {
+        if(review.userId !== req.user.id) {
             return res.status(401).json({message: "Review must belong to current User"})
         }
         if(!review) {
@@ -171,14 +171,14 @@ router.delete(
 
         //get actual review by id
         const review = await Review.findByPk(reviewId)
-        if(review.user_id !== req.user.id) {
+        if(review.userId !== req.user.id) {
             return res.status(401).json({message: "Review must belong to current User"})
         }
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
         //DELETE REVIEW IMAGES ASSOCIATED WITH REVIEW FIRST ONDELETE:CASCADE ISN"T WORKING
-        const reviewImages = await Review_Image.findAll({ where: { review_id: review.id } });
+        const reviewImages = await Review_Image.findAll({ where: { reviewId: review.id } });
         // await reviewImages.destroy()
         // await reviewImages.map(async (reviewImage) => {
         //     await reviewImage.destroy():

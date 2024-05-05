@@ -23,12 +23,12 @@ router.delete(
         const image = await Review_Image.findByPk(imageId)
         // console.log("image", image)
         // console.log("image.user_id", image.user_id)
-        const reviewId = image.dataValues.review_id;
+        const reviewId = image.dataValues.reviewId;
         const review = await Review.findByPk(reviewId)
         if(!image) {
             return res.status(404).json({message: "Spot image couldn't be found"})
         }
-        if(review.user_id !== req.user.id) {
+        if(review.userId !== req.user.id) {
             return res.status(401).json({message: "User must own Review to delete Review Image"})
         }
 

@@ -22,13 +22,13 @@ router.get(
 
         //gel all of current user's bookings
         const getBookings = await Booking.findAll({
-            where: {user_id: userId},
-            attributes: ['id', 'spot_id', 'user_id', 'startDate', 'endDate', 'createdAt', 'updatedAt'],
+            where: {userId: userId},
+            attributes: ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt'],
             include: [{
                 model: Spot,
                 attributes: [
                     'id',
-                    'owner_id',
+                    'ownerId',
                     'address',
                     'city',
                     'state',
@@ -51,10 +51,10 @@ router.get(
         const response = {
             Bookings: getBookings.map(booking => ({
                 id: booking.id,
-                spotId: booking.spot_id,
+                spotId: booking.spotId,
                 Spot: {
                     id: booking.Spot.id,
-                    ownerId: booking.Spot.owner_id,
+                    ownerId: booking.Spot.ownerId,
                     address: booking.Spot.address,
                     city: booking.Spot.city,
                     state: booking.Spot.state,
@@ -65,7 +65,7 @@ router.get(
                     price: booking.Spot.price,
                     previewImage: booking.Spot.Spot_Images.length > 0 ? booking.Spot.Spot_Images[0].url : null // Assuming Spot_Images is an array
                 },
-                userId: booking.user_id,
+                userId: booking.userId,
                 startDate: booking.startDate,
                 endDate: booking.endDate,
                 createdAt: booking.createdAt,

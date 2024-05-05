@@ -19,7 +19,7 @@ module.exports = {
       preview: {
         type: Sequelize.BOOLEAN
       },
-      spot_id: {
+      spotId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Spots", 

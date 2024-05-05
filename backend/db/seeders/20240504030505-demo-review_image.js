@@ -12,11 +12,11 @@ module.exports = {
    await Review_Image.bulkCreate([
     {
       url: 'www.review.com???',
-      review_id: 1
+      reviewId: 1
     },
     {
       url: 'www.another-review.com???',
-      review_id: 2
+      reviewId: 2
     },
    ], {validate: true})
   },
@@ -25,7 +25,7 @@ module.exports = {
     options.tableName = 'Review_Images';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      review_id: { [Op.in]: [1, 2] }
+      reviewId: { [Op.in]: [1, 2] }
     }, {});
   }
 };
