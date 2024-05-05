@@ -106,7 +106,7 @@ router.post(
             where: {review_id: reviewId}
         })
         if(count > 10) {
-            return res.status(401).json({message: "Maximum number of images for this resource was reached"})
+            return res.status(403).json({message: "Maximum number of images for this resource was reached"})
         }
         const reviewImage = await Review_Image.create({
             review_id: reviewId,

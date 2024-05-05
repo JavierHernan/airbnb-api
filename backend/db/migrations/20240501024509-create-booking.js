@@ -24,10 +24,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {model: "Users", key: "id"}
       },
-      start_date: {
+      startDate: {
         type: Sequelize.STRING
       },
-      end_date: {
+      endDate: {
         type: Sequelize.STRING
       },
       createdAt: {

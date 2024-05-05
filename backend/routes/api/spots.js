@@ -172,7 +172,7 @@ router.post(
 
         //check if current user is spot owner
         if(spot.owner_id !== req.user.id) {
-            return res.status(401).json({message: "Spot must belong to current User"})
+            return res.status(40).json({message: "Spot must belong to current User"})
         }
 
         const createImage = await Spot_Image.create({
@@ -183,8 +183,8 @@ router.post(
         const response = {
             id: createImage.id,
             url: createImage.url,
-            preview: createImage.preview,
-            ownerId: spot.owner_id
+            preview: createImage.preview
+            // ownerId: spot.owner_id
         }
 
         return res.status(200).json(response)
@@ -481,7 +481,7 @@ router.post(
     async (req, res) => {
         //grab spot by req.params
         const spotId = parseInt(req.params.spotId);
-        const {start_date, end_date} = req.body;
+        const {startDate, endDate} = req.body;
         const userId = req.user.id;
         //find the actual spot
         const spot = await Spot.findByPk(spotId)
@@ -489,13 +489,13 @@ router.post(
             return res.status(404).json({message: "Spot couldn't be found"})
         }
 
-        const startDate = new Date(start_date);
-        const endDate = new Date(end_date);
-        // console.log("start_date", start_date)
-        // console.log("end_date", end_date)
+        // const startDate = new Date(startDate);
+        // const endDate = new Date(endDate);
+        // console.log("start_date", startDate)
+        // console.log("end_date", endDate)
         // console.log("startDate", startDate)
         // console.log("endDate", endDate)
-        if (end_date <= start_date) {
+        if (endDate <= startDate) {
             return res.status(403).json({ message: "End date must come after start date" });
         }
         // if(spot.user_id !== req.user.id) {
@@ -503,7 +503,7 @@ router.post(
         // }
         
 
-        if (end_date <= start_date) {
+        if (endDate <= startDate) {
             return res.status(403).json({ message: "End date must come after start date" });
         }
 
@@ -513,10 +513,10 @@ router.post(
                 spot_id: spotId,
                 [Op.or]: [
                     {
-                        start_date: { [Op.between]: [start_date, end_date] }
+                        startDate: { [Op.between]: [startDate, endDate] }
                     },
                     {
-                        end_date: { [Op.between]: [start_date, end_date] }
+                        endDate: { [Op.between]: [startDate, endDate] }
                     }
                 ]
             }
@@ -535,16 +535,16 @@ router.post(
         const newBooking = await Booking.create({
             spot_id: spotId,
             user_id: userId,
-            start_date,
-            end_date
+            startDate,
+            endDate
         })
 
         const response = {
             id: newBooking.id,
             spot_id: newBooking.spot_id,
             user_id: newBooking.user_id,
-            startDate: newBooking.start_date,
-            endDate: newBooking.end_date,
+            startDate: newBooking.startDate,
+            endDate: newBooking.endDate,
             createdAt: newBooking.createdAt,
             updatedAt: newBooking.updatedAt
         }
@@ -583,12 +583,12 @@ router.get(
                     model: User,
                     attributes: ['id', 'firstName', 'lastName']
                 }],
-                attributes: ['id', 'spot_id', 'user_id', 'start_date', 'end_date', 'createdAt', 'updatedAt']
+                attributes: ['id', 'spot_id', 'user_id', 'startDate', 'endDate', 'createdAt', 'updatedAt']
             })
         } else if(spot && spot.owner_id !== ownerId) {
             booking = await Booking.findAll({
                 where: { spot_id: spotId},
-                attributes: ['spot_id', 'start_date', 'end_date']
+                attributes: ['spot_id', 'startDate', 'endDate']
             })
             return res.status(200).json({Bookings: booking})
         }
