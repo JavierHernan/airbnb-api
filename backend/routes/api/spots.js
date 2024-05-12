@@ -18,6 +18,10 @@ router.get(
     async(req, res, next) => {
         // const {id, address, city, state, country, lat, lng, name, description, price} = req.body;
         const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.body;
+        console.log("req.body", req.body)
+        console.log("ownderId", ownerId)
+        console.log("address", address)
+
 
         const getAll = await Spot.findAll({
             attributes: [
@@ -44,6 +48,11 @@ router.get(
                 // },
                 {
                     model: Review,
+                    // where: {
+                    //     type: {
+                    //         [Op.in]: req.query.id
+                    //     }
+                    // },
                     attributes: [[Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']]
                 },
                 {
