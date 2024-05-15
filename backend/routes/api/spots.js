@@ -16,18 +16,19 @@ const { handleValidationErrors } = require('../../utils/validation');
 router.get(
     '/',
     async(req, res, next) => {
-        // const {id, address, city, state, country, lat, lng, name, description, price} = req.body;
-        const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.body;
-        console.log("req.body", req.body)
-        console.log("ownderId", ownerId)
-        console.log("address", address)
+        const {id, address, city, state, country, lat, lng, name, description, price} = req.body;
+        // const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.query;
+        console.log("req.query", req.query)
+        // console.log("ownderId", ownerId)
+        // console.log("address", address)
 
 
         const getAll = await Spot.findAll({
             attributes: [
                 // 'user_id',
                 "id",
-                'ownerId',
+                // 'ownerId',
+                // "owner",
                 'address',
                 'city',
                 'state',
@@ -41,11 +42,11 @@ router.get(
                 "updatedAt"
             ],
             include: [
-                // {
-                //     model: User,
-                //     attributes: ["id"],
-                //     as: 'owner_id'
-                // },
+                {
+                    model: User,
+                    attributes: ["id"],
+                    as: 'owner'
+                },
                 {
                     model: Review,
                     // where: {
@@ -68,7 +69,8 @@ router.get(
         const response = {
             Spots: getAll.map(spot => ({
                 id: spot.id,
-                ownerId: spot.ownerId,
+                // ownerId: spot.ownerId,
+                owner: spot.owner,
                 address: spot.address,
                 city: spot.city,
                 state: spot.state,
@@ -610,6 +612,9 @@ router.get(
         return res.status(200).json({Bookings: booking})
     }
 )
+
+//add query filter to get all spots
+
 
 
 module.exports = router;

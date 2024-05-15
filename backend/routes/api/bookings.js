@@ -76,4 +76,84 @@ router.get(
     }
 )
 
+//edit a booking
+router.put(
+    '/:bookingId',
+    requireAuth,
+    async (req, res) => {
+        const bookingId = req.params.bookingId;
+        const updated = req.body;
+        const {startDate, endDate} = updated
+
+        const booking = await Booking.findByPk(bookingId);
+
+        if(!booking) {
+            return res.status(404).json({message: "Booking couldn't be found"})
+        }
+
+        if (endDate <= startDate) {
+            return res.status(400).json({ 
+                message: "Bad Request",
+                erros: {
+                    "endDate": "endDate cannot come before startDate"
+                } 
+            });
+        }
+
+         //Find existing booking
+        // const existingBooking = await Booking.findOne({
+        //     where: {
+        //         spotId: Spot.id,
+        //         [Op.or]: [
+        //             {
+        //                 startDate: { [Op.between]: [startDate, endDate] }
+        //             },
+        //             {
+        //                 endDate: { [Op.between]: [startDate, endDate] }
+        //             }
+        //         ]
+        //     }
+        // })
+        const existingBooking = await Booking.findOne({
+            where: {
+                spotId: booking.spotId, // Assuming spotId is a field in the Booking model
+                id: { [Op.ne]: booking.id }, // Exclude the current booking
+                [Op.or]: [
+                    {
+                        startDate: { [Op.lt]: endDate }, // Existing booking starts before new booking ends
+                        endDate: { [Op.gt]: startDate } // Existing booking ends after new booking starts
+                    }
+                ]
+            }
+        });
+        if(existingBooking) {
+            return res.status(403).json({
+                message: "Sorry, this spot is already booked for the specified dates",
+                errors: {
+                    startDate: "Start date conflicts with an existing booking",
+                    endDate: "End date conflicts with an existing booking"
+                }
+            })
+        }
+
+        await booking.update(updatedData);
+        return res.status(200).json(booking)
+    }
+)
+
+//delete a booking
+router.delete(
+    '/:bookingId',
+    requireAuth,
+    async (req, res) => {
+        const bookingId = req.params.bookingId;
+
+        const booking = await Booking.findByPk(bookingId);
+
+        if(!booking) {
+            return res.status(404).json({message: ""})
+        }
+    }
+)
+
 module.exports = router;
