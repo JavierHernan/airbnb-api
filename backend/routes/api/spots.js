@@ -16,18 +16,17 @@ const { handleValidationErrors } = require('../../utils/validation');
 router.get(
     '/',
     async(req, res, next) => {
-        const {id, address, city, state, country, lat, lng, name, description, price} = req.body;
-        // const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.query;
+        // const {id, address, city, state, country, lat, lng, name, description, price} = req.query;
+        const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.query;
         console.log("req.query", req.query)
-        // console.log("ownderId", ownerId)
+        console.log("ownderId", ownerId)
         // console.log("address", address)
-
 
         const getAll = await Spot.findAll({
             attributes: [
                 // 'user_id',
                 "id",
-                // 'ownerId',
+                'ownerId',
                 // "owner",
                 'address',
                 'city',
@@ -42,11 +41,11 @@ router.get(
                 "updatedAt"
             ],
             include: [
-                {
-                    model: User,
-                    attributes: ["id"],
-                    as: 'owner'
-                },
+                // {
+                //     model: User,
+                //     attributes: ["id"],
+                //     as: 'owner'
+                // },
                 {
                     model: Review,
                     // where: {
@@ -69,8 +68,8 @@ router.get(
         const response = {
             Spots: getAll.map(spot => ({
                 id: spot.id,
-                // ownerId: spot.ownerId,
-                owner: spot.owner,
+                ownerId: spot.ownerId,
+                // owner: spot.owner,
                 address: spot.address,
                 city: spot.city,
                 state: spot.state,
@@ -212,7 +211,6 @@ router.get(
     async (req, res) => {
         // console.log("req.user.id", req.user.id)
         const id = req.user.id; 
-        
 
         const getSpots = await Spot.findAll({
             where: {ownerId: id},
@@ -375,14 +373,25 @@ router.delete(
         });
         //DESTROY ALL STUFF ASSOCIATED WITH THE SPOT FIRSSTTT!!!!
         const bookings = await Booking.findAll({ where: { spotId: spotId } });
-        await Promise.all(bookings.map(booking => booking.destroy()));
+        // await Promise.all(bookings.map(booking => booking.destroy()));
+        bookings.map(booking => booking.destroy())
+
         const spotImages = await Spot_Image.findAll({ where: { spotId: spotId } });
-        await Promise.all(spotImages.map(spotImage => spotImage.destroy()));
-        await Promise.all(reviews.map(async (review) => {
-            const reviewImages = await Review_Image.findAll({ where: { reviewId: review.id } });
-            await Promise.all(reviewImages.map(reviewImage => reviewImage.destroy()));
-        }));
-        await Promise.all(reviews.map(review => review.destroy()));
+        // await Promise.all(spotImages.map(spotImage => spotImage.destroy()));
+        spotImages.map(spotImage => spotImage.destroy())
+
+        // await Promise.all(reviews.map(async (review) => {
+        //     const reviewImages = await Review_Image.findAll({ where: { reviewId: review.id } });
+        //     await Promise.all(reviewImages.map(reviewImage => reviewImage.destroy()));
+        // }));
+        reviews.map((review) => {
+            const reviewImages = Review_Image.findAll({ where: { reviewId: review.id } });
+            reviewImages.map(reviewImage => reviewImage.destroy());
+        })
+
+        // await Promise.all(reviews.map(review => review.destroy()));
+        reviews.map(review => review.destroy())
+
         //FINALLY YOU CAN DESTORY THE SPOT
         await spot.destroy()
         return res.status(200).json({message: "Spot deleted successfully"})
