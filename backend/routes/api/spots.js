@@ -203,48 +203,111 @@ router.get(
         const id = req.user.id; 
         console.log("id",id)
 
-        const getSpots = await Spot.findAll({
-            where: {ownerId: id},
-            include: [
-                {
-                    model: Review,
-                    attributes: [
-                        [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
-                    ],
-                    // as: 'Reviews',
-                    required: false
-                },
-                {
-                    model: Spot_Image,
-                    attributes: ['url'],
-                    where: {preview: true},
-                    required: false
-                }
+        // const getSpots = await Spot.findAll({
+        //     where: {ownerId: id},
+        //     include: [
+        //         {
+        //             model: Review,
+        //             attributes: [
+        //                 [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
+        //             ],
+        //             // as: 'Reviews',
+        //             required: false
+        //         },
+        //         {
+        //             model: Spot_Image,
+        //             attributes: ['url'],
+        //             where: {preview: true},
+        //             required: false
+        //         }
+        //     ],
+        //     group: ['Spot.id'],
+        // })
+        const spots = await Spot.findAll({
+            attributes: [
+                "id",
+                "ownerId",
+                "address",
+                "city",
+                "state",
+                "country",
+                "lat",
+                "lng",
+                "name",
+                "description",
+                "price",
+                "createdAt",
+                "updatedAt"
             ],
-            group: ['Spot.id'],
+            where: {ownerId: id}
         })
+        //grab id's
+        const spotIds = spots.map(spot => spot.id)
 
-        const spots = {
-            Spots: getSpots.map(spot => ({
-                id: spot.id,
-                ownerId: spot.ownerId,
-                address: spot.address,
-                city: spot.city,
-                state: spot.state,
-                country: spot.country,
-                lat: spot.lat,
-                lng: spot.lng,
-                name: spot.name,
-                description: spot.description,
-                price: spot.price,
-                createdAt: spot.createdAt,
-                updatedAt: spot.updatedAt,
-                avgRating: spot.Reviews.length > 0 ? parseFloat(spot.Reviews[0].dataValues.avgRating) : null,
-                // previewImage: spot.Spot_Image ? spot.Spot_Image.url : null
-                previewImage: spot.Spot_Images.length > 0 ? spot.Spot_Images[0].url : null
-            }))
-        }
-        return res.status(200).json(spots)
+        //query reviews for Spot
+        const spotReviews = await Review.findAll({
+            attributes: [
+                'spotId',
+                //grabs and calculates average rating
+                [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
+            ],
+            where: { spotId: spotIds },
+            //when using aggregate, use group by the att that is associated with parent model
+            group: ['spotId']
+        });
+        //query images for Spot
+        const spotImages = await Spot_Image.findAll({
+            attributes: ['spotId','url'],
+            where: { spotId: spotIds, preview: true }
+        });
+        const response = {
+            Spots: spots.map(spot => {
+                //finds review and images belonging to spot
+                const reviewsForSpot = spotReviews.filter(review => review.spotId === spot.id);
+                const imagesForSpot = spotImages.filter(image => image.spotId === spot.id);
+                console.log("reviewsForSpot", reviewsForSpot, "imagesForSpot", imagesForSpot)
+                return {
+                    id: spot.id,
+                    ownerId: spot.ownerId,
+                    address: spot.address,
+                    city: spot.city,
+                    state: spot.state,
+                    country: spot.country,
+                    lat: spot.lat,
+                    lng: spot.lng,
+                    name: spot.name,
+                    description: spot.description,
+                    price: spot.price,
+                    createdAt: spot.createdAt,
+                    updatedAt: spot.updatedAt,
+                    avgRating: reviewsForSpot.length > 0 ? parseFloat(reviewsForSpot[0].dataValues.avgRating) : null,
+                    previewImage: imagesForSpot.length > 0 ? imagesForSpot[0].url : null
+                }
+            })
+        };
+        return res.json(response)
+
+        // const spots = {
+        //     Spots: getSpots.map(spot => ({
+        //         id: spot.id,
+        //         ownerId: spot.ownerId,
+        //         address: spot.address,
+        //         city: spot.city,
+        //         state: spot.state,
+        //         country: spot.country,
+        //         lat: spot.lat,
+        //         lng: spot.lng,
+        //         name: spot.name,
+        //         description: spot.description,
+        //         price: spot.price,
+        //         createdAt: spot.createdAt,
+        //         updatedAt: spot.updatedAt,
+        //         avgRating: spot.Reviews.length > 0 ? parseFloat(spot.Reviews[0].dataValues.avgRating) : null,
+        //         // previewImage: spot.Spot_Image ? spot.Spot_Image.url : null
+        //         previewImage: spot.Spot_Images.length > 0 ? spot.Spot_Images[0].url : null
+        //     }))
+        // }
+        // return res.status(200).json(spots)
     }
 )
 
