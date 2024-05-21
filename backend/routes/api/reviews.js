@@ -144,21 +144,50 @@ router.put(
     reviewValidation,
     async (req,res) => {
         //grab updates
-        const update = req.body
-        console.log("update", update)
-        //grab reviewId, turn into integer
-        const reviewId = parseInt(req.params.reviewId, 10)
-        //grab review to update, can't be const because of reassign
-        let review = await Review.findByPk(reviewId)
-        if(!review) {
-            return res.status(404).json({message: "Review couldn't be found"})
-        }
-        if(review.userId !== req.user.id) {
-            return res.status(401).json({message: "Review must belong to current User"})
-        }
+        // const update = req.body
+        // console.log("update", update)
+        // //grab reviewId, turn into integer
+        // const reviewId = parseInt(req.params.reviewId, 10)
+        // let review = await Review.findByPk(reviewId)
+        // if(!review) {
+        //     return res.status(404).json({message: "Review couldn't be found"})
+        // }
+        // if(review.userId !== req.user.id) {
+        //     return res.status(401).json({message: "Review must belong to current User"})
+        // }
         
-        review = await review.update(update)
-        return res.status(200).json(review)
+        // review = await review.update(update)
+        // return res.status(200).json(review)
+
+        try {
+            // Grab reviewId, turn into integer
+            const reviewId = parseInt(req.params.reviewId, 10);
+            console.log("reviewId", reviewId);
+
+            //grab review to update, can't be const because of reassign
+            let review = await Review.findByPk(reviewId);
+            console.log("review fetched from database", review);
+
+            if (!review) {
+                return res.status(404).json({ message: "Review couldn't be found" });
+            }
+            if (review.userId !== req.user.id) {
+                return res.status(401).json({ message: "Review must belong to current User" });
+            }
+
+            // Grab updates from req.body
+            const updates = req.body;
+            console.log("updates", updates);
+
+            // Update the review
+            review = await review.update(updates);
+            console.log("review after update", review);
+
+            return res.status(200).json(review);
+        } catch (error) {
+            console.error("Error updating review", error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
     }
 )
 
