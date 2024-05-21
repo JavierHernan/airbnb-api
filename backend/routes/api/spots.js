@@ -198,31 +198,8 @@ router.get(
     '/current',
     requireAuth,
     async (req, res) => {
-        // console.log("req.user.id", req.user.id)
-        // const {id} = req.query;
         const id = req.user.id; 
-        console.log("id",id)
 
-        // const getSpots = await Spot.findAll({
-        //     where: {ownerId: id},
-        //     include: [
-        //         {
-        //             model: Review,
-        //             attributes: [
-        //                 [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
-        //             ],
-        //             // as: 'Reviews',
-        //             required: false
-        //         },
-        //         {
-        //             model: Spot_Image,
-        //             attributes: ['url'],
-        //             where: {preview: true},
-        //             required: false
-        //         }
-        //     ],
-        //     group: ['Spot.id'],
-        // })
         const spots = await Spot.findAll({
             attributes: [
                 "id",
@@ -260,6 +237,8 @@ router.get(
             attributes: ['spotId','url'],
             where: { spotId: spotIds, preview: true }
         });
+        console.log("SpotReviews: ", spotReviews);
+        console.log("SpotImages: ", spotImages);
         const response = {
             Spots: spots.map(spot => {
                 //finds review and images belonging to spot

@@ -145,6 +145,7 @@ router.put(
     async (req,res) => {
         //grab updates
         const {update} = req.body
+        console.log("update", update)
         //grab reviewId, turn into integer
         const reviewId = parseInt(req.params.reviewId, 10)
         //grab review to update, can't be const because of reassign
