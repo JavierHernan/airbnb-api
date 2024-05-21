@@ -144,7 +144,7 @@ router.put(
     reviewValidation,
     async (req,res) => {
         //grab updates
-        const {update} = req.body
+        const update = req.body
         console.log("update", update)
         //grab reviewId, turn into integer
         const reviewId = parseInt(req.params.reviewId, 10)
