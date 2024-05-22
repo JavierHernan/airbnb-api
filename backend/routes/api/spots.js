@@ -227,6 +227,7 @@ router.get(
     requireAuth,
     async (req, res) => {
         const id = req.user.id; 
+        console.log("id", id)
 
         const spots = await Spot.findAll({
             // attributes: [
@@ -246,19 +247,14 @@ router.get(
             // ],
             where: {ownerId: id}
         })
+        console.log("spots", spots)
         //grab id's
         const spotIds = spots.map(spot => spot.id)
 
         //query reviews for Spot
         const spotReviews = await Review.findAll({
-            // attributes: [
-            //     'spotId',
-            //     //grabs and calculates average rating
-            //     [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
-            // ],
-            // where: { spotId: spotIds },
-            // //when using aggregate, use group by the att that is associated with parent model
-            // group: ['spotId']
+            attributes: ['spotId', 'stars'],
+            where: { spotId: spotIds }
         });
         //query images for Spot
         const spotImages = await Spot_Image.findAll({
