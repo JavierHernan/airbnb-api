@@ -19,67 +19,121 @@ router.get(
         // const {id, address, city, state, country, lat, lng, name, description, price} = req.query;
         const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.query;
         const spots = await Spot.findAll({
-            attributes: [
-                "id",
-                "ownerId",
-                "address",
-                "city",
-                "state",
-                "country",
-                "lat",
-                "lng",
-                "name",
-                "description",
-                "price",
-                "createdAt",
-                "updatedAt"
-            ]
+            // attributes: [
+            //     "id",
+            //     "ownerId",
+            //     "address",
+            //     "city",
+            //     "state",
+            //     "country",
+            //     "lat",
+            //     "lng",
+            //     "name",
+            //     "description",
+            //     "price",
+            //     "createdAt",
+            //     "updatedAt"
+            // ]
         });
+        let test = await spots[0].toJSON()
+        console.log("test", test)
         //grab id's
         const spotIds = spots.map(spot => spot.id)
+        console.log("spotIds", spotIds)
 
         //query reviews for Spot
         const spotReviews = await Review.findAll({
-            attributes: [
-                'spotId',
-                //grabs and calculates average rating
-                [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
-            ],
-            where: { spotId: spotIds },
-            //when using aggregate, use group by the att that is associated with parent model
-            group: ['spotId']
+            // attributes: [
+            //     'spotId',
+            //     //grabs and calculates average rating
+            //     // [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
+            //     'stars'
+            // ],
+            // // where: { spotId: spotIds },
+            // //when using aggregate, use group by the att that is associated with parent model
+            // group: ['spotId']
         });
+        console.log("spotReviews", spotReviews)
+
         //query images for Spot
         const spotImages = await Spot_Image.findAll({
             attributes: ['spotId','url'],
             where: { spotId: spotIds, preview: true }
         });
 
+        // create object for reviews and images. Each object should have an array of their images/reviews
+        const allReviewsObj = {};
+        const allImagesObj = {};
+
+        spotReviews.forEach(review => {
+            //if current spot's reviews doesn't exist
+            if(!allReviewsObj[review.spotId]) {
+                //create array holding spot's reviews
+                allReviewsObj[review.spotId] = []
+            }
+            //push the reviews rating into the spot's reviews array
+            allReviewsObj[review.spotId].push(review.stars)
+        })
+
+        spotImages.forEach(image => {
+            //assign to each image by spotId its url.
+            allImagesObj[image.spotId] = image.url;
+        })
+
         const response = {
-            Spots: spots.map(spot => {
-                //finds review and images belonging to spot
-                const reviewsForSpot = spotReviews.filter(review => review.spotId === spot.id);
-                const imagesForSpot = spotImages.filter(image => image.spotId === spot.id);
-                console.log("reviewsForSpot", reviewsForSpot, "imagesForSpot", imagesForSpot)
-                return {
-                    id: spot.id,
-                    ownerId: spot.ownerId,
-                    address: spot.address,
-                    city: spot.city,
-                    state: spot.state,
-                    country: spot.country,
-                    lat: spot.lat,
-                    lng: spot.lng,
-                    name: spot.name,
-                    description: spot.description,
-                    price: spot.price,
-                    createdAt: spot.createdAt,
-                    updatedAt: spot.updatedAt,
-                    avgRating: reviewsForSpot.length > 0 ? parseFloat(reviewsForSpot[0].dataValues.avgRating) : null,
-                    previewImage: imagesForSpot.length > 0 ? imagesForSpot[0].url : null
-                }
-            })
-        };
+            Spots: []
+        }
+
+        for (const spot of spots) {
+            const ratings = allReviewsObj[spot.id] || []; //there are ratings or nothing
+            const totalRatings = ratings.reduce((total, rating) => total + rating, 0); //sum
+            const avgRating = ratings.length > 0 ? (totalRatings / ratings.length).toFixed(1) : null; //avg. If none, then null
+            const previewImage = allImagesObj[spot.id] || null; //if no image, then null. if yes, then grab url by spot.id
+
+            response.Spots.push({
+                id: spot.id,
+                ownerId: spot.ownerId,
+                address: spot.address,
+                city: spot.city,
+                state: spot.state,
+                country: spot.country,
+                lat: spot.lat,
+                lng: spot.lng,
+                name: spot.name,
+                description: spot.description,
+                price: spot.price,
+                createdAt: spot.createdAt,
+                updatedAt: spot.updatedAt,
+                avgRating: avgRating ? parseFloat(avgRating) : null, //if rating, turn into number. if not, null
+                previewImage: previewImage
+            });
+        }
+
+        // const response = {
+        //     Spots: spots.map(spot => {
+        //         //finds review and images belonging to spot
+        //         const reviewsForSpot = spotReviews.filter(review => review.spotId === spot.id);
+        //         const imagesForSpot = spotImages.filter(image => image.spotId === spot.id);
+        //         // console.log("reviewsForSpot", reviewsForSpot, "imagesForSpot", imagesForSpot)
+        //         return {
+        //             id: spot.id,
+        //             ownerId: spot.ownerId,
+        //             address: spot.address,
+        //             city: spot.city,
+        //             state: spot.state,
+        //             country: spot.country,
+        //             lat: spot.lat,
+        //             lng: spot.lng,
+        //             name: spot.name,
+        //             description: spot.description,
+        //             price: spot.price,
+        //             createdAt: spot.createdAt,
+        //             updatedAt: spot.updatedAt,
+        //             avgRating: reviewsForSpot.length > 0 ? parseFloat(reviewsForSpot[0].dataValues.avgRating) : null,
+        //             previewImage: imagesForSpot.length > 0 ? imagesForSpot[0].url : null
+        //         }
+        //     })
+        // };
         return res.json(response)
     }
 )
@@ -237,14 +291,14 @@ router.get(
             attributes: ['spotId','url'],
             where: { spotId: spotIds, preview: true }
         });
-        console.log("SpotReviews: ", spotReviews);
-        console.log("SpotImages: ", spotImages);
+        // console.log("SpotReviews: ", spotReviews);
+        // console.log("SpotImages: ", spotImages);
         const response = {
             Spots: spots.map(spot => {
                 //finds review and images belonging to spot
                 const reviewsForSpot = spotReviews.filter(review => review.spotId === spot.id);
                 const imagesForSpot = spotImages.filter(image => image.spotId === spot.id);
-                console.log("reviewsForSpot", reviewsForSpot, "imagesForSpot", imagesForSpot)
+                // console.log("reviewsForSpot", reviewsForSpot, "imagesForSpot", imagesForSpot)
                 return {
                     id: spot.id,
                     ownerId: spot.ownerId,
@@ -360,7 +414,7 @@ router.put(
         const {name} = req.body;
         
         //get spot id
-        console.log("req.params",req.params)
+        // console.log("req.params",req.params)
         const spotId = parseInt(req.params.spotId, 10);
         //get updated info
         const updates = req.body;
