@@ -9,16 +9,28 @@ const handleValidationErrors = (req, _res, next) => {
     const errors = {};
     validationErrors
       .array()
-      .forEach(error => errors[error.path] = error.msg);
+      .forEach(error => {errors[error.path] = error.msg});
+      // .forEach(error => errors[error.param] = error.msg);
+
+      // console.log("errors", errors)
+
+      // delete errors.stack;
+      // delete errors.title;
+      // console.log("errors2", errors)
 
     const err = Error("Bad request.");
+    // console.log("err['title']", err.title)
     err.errors = errors;
     err.status = 400;
-    err.title = "Bad request.";
+    // delete err.title;
+    // delete err.stack;
+    // console.log("err", err)
+    // err.title = "Bad request.";
     next(err);
   }
   next();
 };
+
 
 module.exports = {
   handleValidationErrors

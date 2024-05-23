@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
+      User.hasMany(models.Spot, {foreignKey: "ownerId"}),
+      User.hasMany(models.Booking, {foreignKey: "userId"}),
+      User.hasMany(models.Review, {foreignKey: "userId"})
     }
   };
 
@@ -32,6 +35,14 @@ module.exports = (sequelize, DataTypes) => {
           len: [3, 256],
           isEmail: true
         }
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       hashedPassword: {
         type: DataTypes.STRING.BINARY,
