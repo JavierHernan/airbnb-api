@@ -153,6 +153,7 @@ router.delete(
         if(!booking) {
             return res.status(404).json({message: ""})
         }
+        res.send(":)")
     }
 )
 
