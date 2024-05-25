@@ -425,7 +425,7 @@ router.get(
     }
 )
 
-//Edit
+//Edit a spot
 router.put(
     '/:spotId',
     requireAuth,

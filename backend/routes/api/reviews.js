@@ -18,6 +18,7 @@ router.get(
     requireAuth,
     async(req,res,next) => {
         const id = req.user.id;
+        // const id = 1;
         const reviews = await Review.findAll({
             where: {userId: id},
             include: [
@@ -56,6 +57,22 @@ router.get(
                 }
             ]
         })
+
+        return res.json(reviews)
+
+        const user = await User.findOne({
+            attributes: [
+                'id',
+                'firstName',
+                'lastName'
+            ],
+            where: { id: id}
+        })
+            
+        const spots = await Spot.findAll({})
+
+        const spotImages = await Spot_Image.findAll({})
+
         const response = {
             Reviews: reviews.map(
                 review => ({
