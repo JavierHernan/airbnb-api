@@ -60,47 +60,47 @@ router.get(
 
         return res.json(reviews)
 
-        const user = await User.findOne({
-            attributes: [
-                'id',
-                'firstName',
-                'lastName'
-            ],
-            where: { id: id}
-        })
+        // const user = await User.findOne({
+        //     attributes: [
+        //         'id',
+        //         'firstName',
+        //         'lastName'
+        //     ],
+        //     where: { id: id}
+        // })
             
-        const spots = await Spot.findAll({})
+        // const spots = await Spot.findAll({})
 
-        const spotImages = await Spot_Image.findAll({})
+        // const spotImages = await Spot_Image.findAll({})
 
-        const response = {
-            Reviews: reviews.map(
-                review => ({
-                    id: review.id,
-                    userId: review.userId,
-                    spotId: review.spotId,
-                    review: review.review,
-                    stars: review.stars,
-                    createdAt: review.createdAt,
-                    updatedAt: review.updatedAt,
-                    User: review.User,
-                    Spot: {
-                        id: review.Spot.id,
-                        ownerId: review.Spot.ownerId,
-                        address: review.Spot.address,
-                        city: review.Spot.city,
-                        state: review.Spot.state,
-                        country: review.Spot.country,
-                        lat: review.Spot.lat,
-                        lng: review.Spot.lng,
-                        name: review.Spot.name,
-                        price: review.Spot.price,
-                        previewImage: review.Spot.Spot_Images.length > 0 ? review.Spot.Spot_Images[0].url : null
-                    },
-                    ReviewImages: review.Review_Images
-                }))
-        }
-        return res.status(200).json(response)
+        // const response = {
+        //     Reviews: reviews.map(
+        //         review => ({
+        //             id: review.id,
+        //             userId: review.userId,
+        //             spotId: review.spotId,
+        //             review: review.review,
+        //             stars: review.stars,
+        //             createdAt: review.createdAt,
+        //             updatedAt: review.updatedAt,
+        //             User: review.User,
+        //             Spot: {
+        //                 id: review.Spot.id,
+        //                 ownerId: review.Spot.ownerId,
+        //                 address: review.Spot.address,
+        //                 city: review.Spot.city,
+        //                 state: review.Spot.state,
+        //                 country: review.Spot.country,
+        //                 lat: review.Spot.lat,
+        //                 lng: review.Spot.lng,
+        //                 name: review.Spot.name,
+        //                 price: review.Spot.price,
+        //                 previewImage: review.Spot.Spot_Images.length > 0 ? review.Spot.Spot_Images[0].url : null
+        //             },
+        //             ReviewImages: review.Review_Images
+        //         }))
+        // }
+        // return res.status(200).json(response)
     }
     
 )
