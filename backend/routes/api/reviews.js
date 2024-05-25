@@ -15,7 +15,7 @@ const { handleValidationErrors } = require('../../utils/validation');
 //get all reviews of current User
 router.get(
     '/current',
-    requireAuth,
+    // requireAuth,
     async(req,res,next) => {
         const id = req.user.id;
         // const id = 1;
@@ -219,12 +219,13 @@ router.delete(
 
         //get actual review by id
         const review = await Review.findByPk(reviewId)
-        if(review.userId !== req.user.id) {
-            return res.status(401).json({message: "Review must belong to current User"})
-        }
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
+        if(review.userId !== req.user.id) {
+            return res.status(401).json({message: "Review must belong to current User"})
+        }
+        
         //DELETE REVIEW IMAGES ASSOCIATED WITH REVIEW FIRST ONDELETE:CASCADE ISN"T WORKING
         const reviewImages = await Review_Image.findAll({ where: { reviewId: review.id } });
         // await reviewImages.destroy()
