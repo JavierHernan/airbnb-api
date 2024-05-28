@@ -141,7 +141,7 @@ router.post(
             id: reviewImage.id,
             url: reviewImage.url
         }
-        res.status(200).json(response)
+        res.status(201).json(response)
     }
 )
 
