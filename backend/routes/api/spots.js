@@ -640,9 +640,9 @@ router.post(
     '/:spotId/bookings',
     requireAuth,
     async (req, res) => {
-        if (isNaN(req.params.spotId)) {
-            return res.status(404).json({ message: "Spot couldn't be found" });
-        }
+        // if (isNaN(req.params.spotId)) {
+        //     return res.status(404).json({ message: "Spot couldn't be found" });
+        // }
         //grab spot by req.params
         const spotId = parseInt(req.params.spotId, 10);
         const {startDate, endDate} = req.body;
@@ -659,18 +659,15 @@ router.post(
         // console.log("end_date", endDate)
         // console.log("startDate", startDate)
         // console.log("endDate", endDate)
-        if (endDate <= startDate) {
+        const formattedStartDate = new Date(startDate);
+        const formattedEndDate = new Date(endDate);
+        if (formattedEndDate <= formattedStartDate) {
             return res.status(403).json({ message: "End date must come after start date" });
         }
         // if(spot.user_id !== req.user.id) {
         //     return res.status(403).json({message: "Spot must belong to current User"})
         // }
         
-
-        if (endDate <= startDate) {
-            return res.status(403).json({ message: "End date must come after start date" });
-        }
-
         //Find existing booking
         const existingBooking = await Booking.findOne({
             where: {
@@ -694,6 +691,7 @@ router.post(
                 }
             })
         }
+        
 
         //create Booking
         const newBooking = await Booking.create({
@@ -721,7 +719,6 @@ router.post(
 //get all bookings for a spot based on spot's id
 router.get(
     '/:spotId/bookings',
-    requireAuth,
     async (req,res) => {
         //grab spotId
         const spotId = parseInt(req.params.spotId)
