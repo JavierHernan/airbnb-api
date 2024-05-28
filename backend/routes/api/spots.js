@@ -394,13 +394,17 @@ router.get(
         //get owner details 
         const ownerDetails = await User.findByPk(spot.ownerId)
         //get # of reviews and avgRating
-        const reviewDetails = await Review.findOne({
-            attributes: [
-                [Sequelize.fn('COUNT', Sequelize.col('review')), 'numReviews'],
-                [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
-            ],
-            where: {spotId: spotId}
-        })
+        const reviews = await Review.findAll({ where: { spotId: spotId } });
+        // Calculate number of reviews and average rating
+        const numReviews = reviews.length;
+        const avgRating = numReviews > 0 ? reviews.reduce((sum, review) => sum + review.stars, 0) / numReviews : null;
+        // const reviewDetails = await Review.findOne({
+        //     attributes: [
+        //         [Sequelize.fn('COUNT', Sequelize.col('review')), 'numReviews'],
+        //         [Sequelize.fn('AVG', Sequelize.col('stars')), 'avgRating']
+        //     ],
+        //     where: {spotId: spotId}
+        // })
 
        //combine everything
        const spotDetails = {
@@ -417,12 +421,12 @@ router.get(
             price: spot.price,
             createdAt: spot.createdAt,
             updatedAt: spot.updatedAt,
-            numReviews: reviewDetails.numReviews,
-            avgRating: reviewDetails.avgRating || "Currently no reviews for this spot", // if no reviews
-            SpotImages: spotImages.map(image => ({
+            numReviews: numReviews,
+            avgRating: avgRating,
+            SpotImages: spotImages.map((image, index) => ({
                 id: image.id,
                 url: image.url,
-                preview: image.preview
+                preview: index === 0
             })),
             // {
             //     id: spotImages.id,
