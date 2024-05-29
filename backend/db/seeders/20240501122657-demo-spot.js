@@ -37,7 +37,7 @@ module.exports = {
         price: "69",
       },
       {
-        ownerId: 3,
+        ownerId: 2,
         address: "5678999 Fake Address Lane",
         city: "Fake City 3",
         state: "FakeState3",
@@ -46,6 +46,18 @@ module.exports = {
         lng: -5.06109,
         name: "Fake Name 3",
         description: "fake description 3",
+        price: "69",
+      },
+      {
+        ownerId: 2,
+        address: "567899 Fake Address Lane",
+        city: "Fake City 4",
+        state: "FakeState4",
+        country: "United States",
+        lat: 29.63933,
+        lng: -5.06108,
+        name: "Fake Name 4",
+        description: "fake description 4",
         price: "69",
       },
     ], { validate: true });
