@@ -382,8 +382,8 @@ router.get(
 router.get(
     '/:spotId',
     async (req,res) => {
-        // const {spotId} = req.params;
-        const {spotId} = req.query;
+        const {spotId} = req.params;
+        // const {spotId} = req.query;
         console.log("spotId",spotId)
 
         //get spot details by id in params
