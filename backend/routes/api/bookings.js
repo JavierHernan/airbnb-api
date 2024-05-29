@@ -100,43 +100,45 @@ router.put(
             });
         }
 
-         //Find existing booking
-        // const existingBooking = await Booking.findOne({
-        //     where: {
-        //         spotId: Spot.id,
-        //         [Op.or]: [
-        //             {
-        //                 startDate: { [Op.between]: [startDate, endDate] }
-        //             },
-        //             {
-        //                 endDate: { [Op.between]: [startDate, endDate] }
-        //             }
-        //         ]
-        //     }
-        // })
-        const existingBooking = await Booking.findOne({
-            where: {
-                spotId: booking.spotId, // Assuming spotId is a field in the Booking model
-                id: { [Op.ne]: booking.id }, // Exclude the current booking
-                [Op.or]: [
-                    {
-                        startDate: { [Op.lt]: endDate }, // Existing booking starts before new booking ends
-                        endDate: { [Op.gt]: startDate } // Existing booking ends after new booking starts
-                    }
-                ]
-            }
+        const allBookings = await Booking.findAll({
+            where: {spotId: booking.spotId}
         });
-        if(existingBooking) {
-            return res.status(403).json({
-                message: "Sorry, this spot is already booked for the specified dates",
-                errors: {
-                    startDate: "Start date conflicts with an existing booking",
-                    endDate: "End date conflicts with an existing booking"
+
+        for(const existingBooking of allBookings) {
+            if(existingBooking.id !== booking.id) {
+                const existingStartDate = new Date(existingBooking.startDate);
+                const existingEndDate = new Date(existingBooking.endDate);
+                const newStartDate = new Date(startDate);
+                const newEndDate = new Date(endDate);
+                //conflict conditionals
+                if (
+                    (newStartDate < existingEndDate && newStartDate >= existingStartDate) ||
+                    (newEndDate > existingStartDate && newEndDate <= existingEndDate) ||
+                    (newStartDate <= existingStartDate && newEndDate >= existingEndDate)
+                ) {
+                    return res.status(403).json({
+                        message: "Sorry, this spot is already booked for the specified dates",
+                        errors: {
+                            startDate: "Start date conflicts with an existing booking",
+                            endDate: "End date conflicts with an existing booking"
+                        }
+                    });
                 }
-            })
+            }
         }
 
         await booking.update(updatedData);
+
+        const response = {
+            id: booking.id,
+            spotId: booking.spotId,
+            userId: booking.userId,
+            startDate: booking.startDate,
+            endDate: booking.endDate,
+            createdAt: booking.createdAt,
+            updatedAt: booking.updatedAt
+        };
+
         return res.status(200).json(booking)
     }
 )
@@ -146,14 +148,25 @@ router.delete(
     '/:bookingId',
     requireAuth,
     async (req, res) => {
-        const bookingId = req.params.bookingId;
+        const bookingId = parseInt(req.params.bookingId, 10);
 
         const booking = await Booking.findByPk(bookingId);
 
         if(!booking) {
-            return res.status(404).json({message: ""})
+            return res.status(404).json({message: "Booking couldn't be found"})
         }
-        res.send(":)")
+        //has booking started?
+        //grab date
+        const today = new Date();
+        //grab booking start date
+        const bookingStartDate = new Date(booking.startDate);
+        //if booking has started, error
+        if(today >= bookingId) {
+            return res.status(403).json({message: "Bookings that have been started can't be deleted"})
+        }
+        //delete the booking
+        await booking.destroy()
+        return res.status(200).json({message: "Successfully deleted"})
     }
 )
 
