@@ -24,6 +24,18 @@ module.exports = {
         review: "Fake Review 2",
         stars: 4
       },
+      {
+        spotId: 3,
+        userId: 2,
+        review: "Fake Review 3",
+        stars: 5
+      },
+      {
+        spotId: 3,
+        userId: 1,
+        review: "Fake Review 4",
+        stars: 1
+      },
     ], { validate: true });
   },
 

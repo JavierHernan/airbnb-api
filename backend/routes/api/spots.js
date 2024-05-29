@@ -161,10 +161,22 @@ router.post(
                 message: "Name must be less than 50 characters",
             })
         }
-        if(!name) {
-            res.status(400).json({message: "Bad request.", errors: "Name is required"})
+        // if(!name) {
+        //     res.status(400).json({message: "Bad request.", errors: "Name is required"})
+        // }
+        const spotExists = await Spot.findOne({
+            where: {
+                address,
+                city,
+                state,
+                country
+            }
+        })
+        if (spotExists) {
+            return res.status(400).json({
+                message: "This Spot already exists",
+            });
         }
-        
         const newSpot = await Spot.create({
             id,
             ownerId: owner_Id,//
@@ -281,7 +293,8 @@ router.get(
             //assign to each image by spotId its url.
             allImagesObj[image.spotId] = image.url;
         })
-
+        console.log("allReviewsObj", allReviewsObj)
+        console.log("allImagesObj", allImagesObj)
         const response = {
             Spots: []
         }
@@ -290,6 +303,7 @@ router.get(
             const ratings = allReviewsObj[spot.id] || []; //there are ratings or nothing
             const totalRatings = ratings.reduce((total, rating) => total + rating, 0); //sum
             const avgRating = ratings.length > 0 ? (totalRatings / ratings.length).toFixed(1) : null; //avg. If none, then null
+            console.log("avgRating", avgRating)
             const previewImage = allImagesObj[spot.id] || null; //if no image, then null. if yes, then grab url by spot.id
 
             response.Spots.push({
