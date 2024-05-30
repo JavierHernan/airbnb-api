@@ -81,7 +81,8 @@ router.put(
     '/:bookingId',
     requireAuth,
     async (req, res) => {
-        const bookingId = req.params.bookingId;
+        // const bookingId = req.params.bookingId;
+        const bookingId = parseInt(req.params.bookingId, 10);
         const updated = req.body;
         const {startDate, endDate} = updated
 
