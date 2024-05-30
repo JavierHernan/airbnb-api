@@ -648,7 +648,7 @@ router.post(
         //     return res.status(404).json({ message: "Spot couldn't be found" });
         // }
         //grab spot by req.params
-        const spotId = parseInt(req.params.spotId, 10);
+        const spotId = parseInt(req.params.spotId);
         const {startDate, endDate} = req.body;
         const userId = req.user.id;
         //find the actual spot
