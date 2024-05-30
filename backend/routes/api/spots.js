@@ -203,6 +203,9 @@ router.post(
         // console.log("req.params",req.params)
         //grab spotId in params
         // const {spotId} = req.params;
+        if (isNaN(req.params.spotId)) {
+            return res.status(404).json({ message: "Spot couldn't be found" });
+        }
         const spotId = parseInt(req.params.spotId, 10);
         //grab image url from req.body
         const { url, preview } = req.body;
@@ -229,7 +232,7 @@ router.post(
             // ownerId: spot.owner_id
         }
 
-        return res.status(200).json(response)
+        return res.status(201).json(response)
     }
 )
 
@@ -302,9 +305,9 @@ router.get(
         for (const spot of spots) {
             const ratings = allReviewsObj[spot.id] || []; //there are ratings or nothing
             const totalRatings = ratings.reduce((total, rating) => total + rating, 0); //sum
-            const avgRating = ratings.length > 0 ? (totalRatings / ratings.length).toFixed(1) : null; //avg. If none, then null
+            const avgRating = ratings.length > 0 ? (totalRatings / ratings.length).toFixed(1) : "NEW"; //avg. If none, then null
             console.log("avgRating", avgRating)
-            const previewImage = allImagesObj[spot.id] || null; //if no image, then null. if yes, then grab url by spot.id
+            const previewImage = allImagesObj[spot.id] || "NEW"; //if no image, then null. if yes, then grab url by spot.id
 
             response.Spots.push({
                 id: spot.id,
@@ -400,7 +403,11 @@ router.get(
         const reviews = await Review.findAll({ where: { spotId: spotId } });
         // Calculate number of reviews and average rating
         const numReviews = reviews.length;
-        const avgRating = numReviews > 0 ? reviews.reduce((sum, review) => sum + review.stars, 0) / numReviews : null;
+        let avgRating;
+        if(numReviews > 0) {
+            avgRating = numReviews > 0 ? reviews.reduce((sum, review) => sum + review.stars, 0) / numReviews : "NEW";
+        }
+        
         // const reviewDetails = await Review.findOne({
         //     attributes: [
         //         [Sequelize.fn('COUNT', Sequelize.col('review')), 'numReviews'],
@@ -424,12 +431,13 @@ router.get(
             price: spot.price,
             createdAt: spot.createdAt,
             updatedAt: spot.updatedAt,
-            numReviews: numReviews,
+            // numReviews: numReviews,
+            numReviews: reviews.length > 0 ? numReviews : "NEW",
             avgRating: avgRating,
             SpotImages: spotImages.map((image, index) => ({
                 id: image.id,
                 url: image.url,
-                preview: index === 0
+                preview: image.preview
             })),
             // {
             //     id: spotImages.id,
@@ -597,6 +605,7 @@ const reviewValidation = [
 router.post(
     '/:spotId/reviews',
     reviewValidation,
+    requireAuth,
     async (req, res) => {
         //get spotId
         const spotId = parseInt(req.params.spotId, 10);
