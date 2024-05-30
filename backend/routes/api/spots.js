@@ -640,6 +640,9 @@ router.post(
     '/:spotId/bookings',
     requireAuth,
     async (req, res) => {
+        if (isNaN(req.params.spotId)) {
+            return res.status(404).json({ message: "Spot couldn't be found" });
+        }
         //grab spot by req.params
         const spotId = parseInt(req.params.spotId);
         const {startDate, endDate} = req.body;
@@ -718,6 +721,7 @@ router.post(
 //get all bookings for a spot based on spot's id
 router.get(
     '/:spotId/bookings',
+    requireAuth,
     async (req,res) => {
         //grab spotId
         const spotId = parseInt(req.params.spotId)
