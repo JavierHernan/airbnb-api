@@ -33,8 +33,8 @@ router.delete(
         if (!review) {
             return res.status(404).json({ message: "Review couldn't be found" });
         }
-        
-        if(review.userId !== req.user.id) {
+        const reviewData = review.toJSON();
+        if(reviewData.userId !== req.user.id) {
             return res.status(401).json({message: "User must own Review to delete Review Image"})
         }
 

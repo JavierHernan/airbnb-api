@@ -211,12 +211,16 @@ router.post(
         const { url, preview } = req.body;
         
         const spot = await Spot.findByPk(spotId)
+        // console.log("spot", spot)
+        // console.log("req.user.id", req.user.id)
         if(!spot) {
             return res.status(404).json({message: "Spot couldn't be found"})
         }
 
         //check if current user is spot owner
-        if(spot.ownerId !== req.user.id) {
+        const spotData = spot.toJSON()
+        if(spotData.ownerId !== req.user.id) {
+            // console.log("spot", spot)
             return res.status(401).json({message: "Spot must belong to current User"})
         }
 
@@ -651,6 +655,10 @@ router.post(
         const spot = await Spot.findByPk(spotId)
         if(!spot) {
             return res.status(404).json({message: "Spot couldn't be found"})
+        }
+        const spotData = spot.toJSON()
+        if(spotData.ownerId === req.user.id) {
+            return res.status(401).json({message: "Spot must not belong to current User"})
         }
 
         // const startDate = new Date(startDate);
