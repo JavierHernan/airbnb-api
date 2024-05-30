@@ -90,6 +90,10 @@ router.put(
         if(!booking) {
             return res.status(404).json({message: "Booking couldn't be found"})
         }
+        const bookingData = booking.toJSON()
+        if(bookingData.userId !== req.user.id) {
+            return res.status(401).json({message: "Booking must belong to current User"})
+        }
 
         if (endDate <= startDate) {
             return res.status(400).json({ 
@@ -154,6 +158,10 @@ router.delete(
 
         if(!booking) {
             return res.status(404).json({message: "Booking couldn't be found"})
+        }
+        const bookingData = booking.toJSON();
+        if(bookingData.userId !== req.user.id) {
+            
         }
         //has booking started?
         //grab date

@@ -120,6 +120,10 @@ router.post(
         if(!findReview) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
+        const findReviewData = findReview.toJSON()
+        if(findReviewData.userIdId !== req.user.id) {
+            return res.status(401).json({message: "Review must belong to current User"})
+        }
         const count = await Review_Image.count({
             where: {reviewId: reviewId}
         })
@@ -189,7 +193,8 @@ router.put(
             if (!review) {
                 return res.status(404).json({ message: "Review couldn't be found" });
             }
-            if (review.userId !== req.user.id) {
+            const reviewData = review.toJSON()
+            if (reviewData.userId !== req.user.id) {
                 return res.status(401).json({ message: "Review must belong to current User" });
             }
 
@@ -222,7 +227,8 @@ router.delete(
         if(!review) {
             return res.status(404).json({message: "Review couldn't be found"})
         }
-        if(review.userId !== req.user.id) {
+        const reviewData = review.toJSON()
+        if(reviewData.userId !== req.user.id) {
             return res.status(401).json({message: "Review must belong to current User"})
         }
         
