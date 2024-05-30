@@ -152,7 +152,13 @@ router.delete(
     '/:bookingId',
     requireAuth,
     async (req, res) => {
-        const bookingId = parseInt(req.params.bookingId, 10);
+        // if (isNaN(req.params.bookingId)) {
+        //     return res.status(404).json({ message: "Booking couldn't be found" });
+        // }
+
+        // const bookingId = parseInt(req.params.bookingId, 10);
+
+        const bookingId = req.params.bookingId;
 
         const booking = await Booking.findByPk(bookingId);
 
@@ -161,7 +167,7 @@ router.delete(
         }
         const bookingData = booking.toJSON();
         if(bookingData.userId !== req.user.id) {
-            
+            return res.status(401).json({message: "Booking must belong to current User"})
         }
         //has booking started?
         //grab date
