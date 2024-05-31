@@ -83,11 +83,12 @@ router.put(
     async (req, res) => {
         // const bookingId = req.params.bookingId;
         const bookingId = parseInt(req.params.bookingId);
-        const updated = req.body;
-        const {startDate, endDate} = updated
+        console.log("booking", bookingId)
+        // const updated = req.body;
+        const {startDate, endDate} = req.body;
 
         const booking = await Booking.findByPk(bookingId);
-
+        console.log("booking", booking)
         if(!booking) {
             return res.status(404).json({message: "Booking couldn't be found"})
         }
@@ -132,17 +133,17 @@ router.put(
             }
         }
 
-        await booking.update(updatedData);
+        await booking.update({startDate, endDate});
 
-        const response = {
-            id: booking.id,
-            spotId: booking.spotId,
-            userId: booking.userId,
-            startDate: booking.startDate,
-            endDate: booking.endDate,
-            createdAt: booking.createdAt,
-            updatedAt: booking.updatedAt
-        };
+        // const response = {
+        //     id: booking.id,
+        //     spotId: booking.spotId,
+        //     userId: booking.userId,
+        //     startDate: booking.startDate,
+        //     endDate: booking.endDate,
+        //     createdAt: booking.createdAt,
+        //     updatedAt: booking.updatedAt
+        // };
 
         return res.status(200).json(booking)
     }
