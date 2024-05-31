@@ -17,8 +17,29 @@ router.get(
     '/',
     async(req, res, next) => {
         // const {id, address, city, state, country, lat, lng, name, description, price} = req.query;
-        const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.query;
-        const spots = await Spot.findAll({});
+        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, page, size} = req.query;
+        
+        const filters = {};
+        if (id) filters.id = id;
+        if (ownerId) filters.ownerId = ownerId;
+        if (address) filters.address = address;
+        if (city) filters.city = city;
+        if (state) filters.state = state;
+        if (country) filters.country = country;
+        if (lat) filters.lat = lat;
+        if (lng) filters.lng = lng;
+        if (name) filters.name = name;
+        if (description) filters.description = description;
+        if (price) filters.price = price;
+
+        // const page = 20;
+
+        const spots = await Spot.findAll({
+            where: filters,
+            limit: size,
+            offset: size * (page - 1);
+        });
+        
         let test = await spots[0].toJSON()
         console.log("test", test)
         //grab id's
