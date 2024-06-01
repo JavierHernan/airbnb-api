@@ -24,54 +24,105 @@ router.get(
         const getBookings = await Booking.findAll({
             where: {userId: userId},
             attributes: ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt'],
-            include: [{
-                model: Spot,
-                attributes: [
-                    'id',
-                    'ownerId',
-                    'address',
-                    'city',
-                    'state',
-                    'country',
-                    'lat',
-                    'lng',
-                    'name',
-                    'price',
+        //     include: [{
+        //         model: Spot,
+        //         attributes: [
+        //             'id',
+        //             'ownerId',
+        //             'address',
+        //             'city',
+        //             'state',
+        //             'country',
+        //             'lat',
+        //             'lng',
+        //             'name',
+        //             'price',
                     
-                ],
-                include: [{
-                    model: Spot_Image,
-                attributes: [
-                    'url'
-                ]
-                }]
-            }
-        ]
+        //         ],
+        //         include: [{
+        //             model: Spot_Image,
+        //         attributes: [
+        //             'url'
+        //         ]
+        //         }]
+        //     }
+        // ]
         })
+        const spotIds = bookings.map(booking => booking.spotId);
+
+        const spots = await Spot.findAll({
+            where: {id: spotIds},
+            attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price']
+        })
+
+        const spotImages = await Spot_Image.findAll({
+            where: {spotId: spotIds, preview: true},
+            attributes: ['spotId', 'url']
+        })
+
+        const spotObj = {};
+        spots.forEach(spot => {
+            spotObj[spot.id] = spot.toJSON()
+        })
+
+        spotImages.forEach(image => {
+            if (spotMap[image.spotId]) {
+                spotMap[image.spotId].previewImage = image.url;
+            }
+        });
+
         const response = {
-            Bookings: getBookings.map(booking => ({
-                id: booking.id,
-                spotId: booking.spotId,
-                Spot: {
-                    id: booking.Spot.id,
-                    ownerId: booking.Spot.ownerId,
-                    address: booking.Spot.address,
-                    city: booking.Spot.city,
-                    state: booking.Spot.state,
-                    country: booking.Spot.country,
-                    lat: booking.Spot.lat,
-                    lng: booking.Spot.lng,
-                    name: booking.Spot.name,
-                    price: booking.Spot.price,
-                    previewImage: booking.Spot.Spot_Images.length > 0 ? booking.Spot.Spot_Images[0].url : null // Assuming Spot_Images is an array
-                },
-                userId: booking.userId,
-                startDate: booking.startDate,
-                endDate: booking.endDate,
-                createdAt: booking.createdAt,
-                updatedAt: booking.updatedAt
-            }))
-        }
+            Bookings: bookings.map(booking => {
+                const spot = spotMap[booking.spotId] || {};
+                return {
+                    id: booking.id,
+                    spotId: booking.spotId,
+                    Spot: {
+                        id: spot.id,
+                        ownerId: spot.ownerId,
+                        address: spot.address,
+                        city: spot.city,
+                        state: spot.state,
+                        country: spot.country,
+                        lat: spot.lat,
+                        lng: spot.lng,
+                        name: spot.name,
+                        price: spot.price,
+                        previewImage: spot.previewImage || null
+                    },
+                    userId: booking.userId,
+                    startDate: booking.startDate,
+                    endDate: booking.endDate,
+                    createdAt: booking.createdAt,
+                    updatedAt: booking.updatedAt
+                };
+            })
+        };
+
+        // const response = {
+        //     Bookings: getBookings.map(booking => ({
+        //         id: booking.id,
+        //         spotId: booking.spotId,
+        //         Spot: {
+        //             id: booking.Spot.id,
+        //             ownerId: booking.Spot.ownerId,
+        //             address: booking.Spot.address,
+        //             city: booking.Spot.city,
+        //             state: booking.Spot.state,
+        //             country: booking.Spot.country,
+        //             lat: booking.Spot.lat,
+        //             lng: booking.Spot.lng,
+        //             name: booking.Spot.name,
+        //             price: booking.Spot.price,
+        //             previewImage: booking.Spot.Spot_Images.length > 0 ? booking.Spot.Spot_Images[0].url : null // Assuming Spot_Images is an array
+        //         },
+        //         userId: booking.userId,
+        //         startDate: booking.startDate,
+        //         endDate: booking.endDate,
+        //         createdAt: booking.createdAt,
+        //         updatedAt: booking.updatedAt
+        //     }))
+        // }
         return res.status(200).json(response)
     }
 )
