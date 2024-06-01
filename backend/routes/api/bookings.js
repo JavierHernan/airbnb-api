@@ -177,7 +177,7 @@ router.delete(
         //grab booking start date
         const bookingStartDate = new Date(booking.startDate);
         //if booking has started, error
-        if(today >= bookingId) {
+        if(today >= bookingStartDate) {
             return res.status(403).json({message: "Bookings that have been started can't be deleted"})
         }
         //delete the booking
