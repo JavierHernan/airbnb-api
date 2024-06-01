@@ -274,21 +274,6 @@ router.get(
         console.log("id", id)
 
         const spots = await Spot.findAll({
-            // attributes: [
-            //     "id",
-            //     "ownerId",
-            //     "address",
-            //     "city",
-            //     "state",
-            //     "country",
-            //     "lat",
-            //     "lng",
-            //     "name",
-            //     "description",
-            //     "price",
-            //     "createdAt",
-            //     "updatedAt"
-            // ],
             where: {ownerId: id}
         })
         console.log("spots", spots)
@@ -357,56 +342,7 @@ router.get(
             });
         }
         
-
-
-        // const response = {
-        //     Spots: spots.map(spot => {
-        //         //finds review and images belonging to spot
-        //         const reviewsForSpot = spotReviews.filter(review => review.spotId === spot.id);
-        //         const imagesForSpot = spotImages.filter(image => image.spotId === spot.id);
-        //         // console.log("reviewsForSpot", reviewsForSpot, "imagesForSpot", imagesForSpot)
-        //         return {
-        //             id: spot.id,
-        //             ownerId: spot.ownerId,
-        //             address: spot.address,
-        //             city: spot.city,
-        //             state: spot.state,
-        //             country: spot.country,
-        //             lat: spot.lat,
-        //             lng: spot.lng,
-        //             name: spot.name,
-        //             description: spot.description,
-        //             price: spot.price,
-        //             createdAt: spot.createdAt,
-        //             updatedAt: spot.updatedAt,
-        //             avgRating: reviewsForSpot.length > 0 ? parseFloat(reviewsForSpot[0].dataValues.avgRating) : null,
-        //             previewImage: imagesForSpot.length > 0 ? imagesForSpot[0].url : null
-        //         }
-        //     })
-        // };
         return res.json(response)
-
-        // const spots = {
-        //     Spots: getSpots.map(spot => ({
-        //         id: spot.id,
-        //         ownerId: spot.ownerId,
-        //         address: spot.address,
-        //         city: spot.city,
-        //         state: spot.state,
-        //         country: spot.country,
-        //         lat: spot.lat,
-        //         lng: spot.lng,
-        //         name: spot.name,
-        //         description: spot.description,
-        //         price: spot.price,
-        //         createdAt: spot.createdAt,
-        //         updatedAt: spot.updatedAt,
-        //         avgRating: spot.Reviews.length > 0 ? parseFloat(spot.Reviews[0].dataValues.avgRating) : null,
-        //         // previewImage: spot.Spot_Image ? spot.Spot_Image.url : null
-        //         previewImage: spot.Spot_Images.length > 0 ? spot.Spot_Images[0].url : null
-        //     }))
-        // }
-        // return res.status(200).json(spots)
     }
 )
 
@@ -498,10 +434,10 @@ router.put(
         const updates = req.body;
         //get spot
         const spot = await Spot.findByPk(spotId)
-        const spotData = spot.toJSON();
         if(!spot) {
             return res.status(404).json({message: "Spot couldn't be found"})
         }
+        const spotData = spot.toJSON();
         if(spotData.ownerId !== req.user.id) {
             return res.status(401).json({message: "Spot must belong to current User"})
         }

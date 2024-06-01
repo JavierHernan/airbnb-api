@@ -114,7 +114,7 @@ router.post(
         //get image url from req.body
         const {url} = req.body;
         //get id of review to create image for
-        const reviewId = parseInt(req.params.reviewId, 10)
+        const reviewId = parseInt(req.params.reviewId)
 
         const findReview = await Review.findByPk(reviewId)
         if(!findReview) {
@@ -127,7 +127,7 @@ router.post(
         const count = await Review_Image.count({
             where: {reviewId: reviewId}
         })
-        if(count > 10) {
+        if(count >= 10) {
             return res.status(403).json({message: "Maximum number of images for this resource was reached"})
         }
         const reviewImage = await Review_Image.create({
@@ -145,7 +145,7 @@ router.post(
             id: reviewImage.id,
             url: reviewImage.url
         }
-        res.status(201).json(response)
+        return res.status(201).json(response)
     }
 )
 
