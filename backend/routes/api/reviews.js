@@ -121,7 +121,7 @@ router.post(
             return res.status(404).json({message: "Review couldn't be found"})
         }
         const findReviewData = findReview.toJSON()
-        if(findReviewData.userIdId !== req.user.id) {
+        if(findReviewData.userId !== req.user.id) {
             return res.status(401).json({message: "Review must belong to current User"})
         }
         const count = await Review_Image.count({
@@ -133,12 +133,12 @@ router.post(
         const reviewImage = await Review_Image.create({
             reviewId: reviewId,
             url
-        },
-            {
-                attributes: {
-                    exlude: ['createdAt', 'updatedAt', 'reviewId']
-                }
-            }
+        }
+            // {
+            //     attributes: {
+            //         exlude: ['createdAt', 'updatedAt', 'reviewId']
+            //     }
+            // }
         )
 
         const response = {

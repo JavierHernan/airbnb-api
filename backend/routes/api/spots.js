@@ -12,13 +12,38 @@ const router = express.Router();
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
+const queryValidation = [
+    check('page')
+        .optional()
+        .isInt({ min: 1 }).withMessage('Page must be greater than or equal to 1'),
+    check('size')
+        .optional()
+        .isInt({ min: 1 }).withMessage('Size must be greater than or equal to 1'),
+    check('lat')
+        .optional()
+        .isFloat({ min: -90}).withMessage('Minimum latitude is invalid')
+        .isFloat({max: 90}).withMessage('Maximum latitude is invalid'),
+
+        // .isFloat({ min: -90, max: 90 }).withMessage('Latitude must be between -90 and 90'),
+    check('lng')
+        .optional()
+        .isFloat({ min: -180}).withMessage('Minimum longitude is invalid')
+        .isFloat({max: 180}).withMessage('Maximum longitude is invalid'),
+
+        // .isFloat({ min: -180, max: 180 }).withMessage('Longitude must be between -180 and 180'),
+    check('price')
+        .optional()
+        .isFloat({ min: 0 }).withMessage('Minimum price must be greater than or equal to 0'),
+]
+
 //Get all Spots
 router.get(
     '/',
     async(req, res, next) => {
         // const {id, address, city, state, country, lat, lng, name, description, price} = req.query;
-        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, page, size} = req.query;
+        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, page = 1, size = 20} = req.query;
         
+        //search queries
         const filters = {};
         if (id) filters.id = id;
         if (ownerId) filters.ownerId = ownerId;
@@ -32,12 +57,14 @@ router.get(
         if (description) filters.description = description;
         if (price) filters.price = price;
 
-        // const page = 20;
-
+        //convert
+        const pageNumber = parseInt(page);
+        const sizeNumber = parseInt(size)
+        //pagination
         const spots = await Spot.findAll({
             where: filters,
-            limit: size,
-            offset: size * (page - 1);
+            limit: sizeNumber,
+            offset: sizeNumber * (pageNumber - 1)
         });
         
         let test = await spots[0].toJSON()
@@ -103,32 +130,9 @@ router.get(
                 previewImage: previewImage
             });
         }
-
-        // const response = {
-        //     Spots: spots.map(spot => {
-        //         //finds review and images belonging to spot
-        //         const reviewsForSpot = spotReviews.filter(review => review.spotId === spot.id);
-        //         const imagesForSpot = spotImages.filter(image => image.spotId === spot.id);
-        //         // console.log("reviewsForSpot", reviewsForSpot, "imagesForSpot", imagesForSpot)
-        //         return {
-        //             id: spot.id,
-        //             ownerId: spot.ownerId,
-        //             address: spot.address,
-        //             city: spot.city,
-        //             state: spot.state,
-        //             country: spot.country,
-        //             lat: spot.lat,
-        //             lng: spot.lng,
-        //             name: spot.name,
-        //             description: spot.description,
-        //             price: spot.price,
-        //             createdAt: spot.createdAt,
-        //             updatedAt: spot.updatedAt,
-        //             avgRating: reviewsForSpot.length > 0 ? parseFloat(reviewsForSpot[0].dataValues.avgRating) : null,
-        //             previewImage: imagesForSpot.length > 0 ? imagesForSpot[0].url : null
-        //         }
-        //     })
-        // };
+        //add page and size
+        response.page = pageNumber;
+        response.size = sizeNumber;
         return res.json(response)
     }
 )
@@ -489,15 +493,16 @@ router.put(
         
         //get spot id
         // console.log("req.params",req.params)
-        const spotId = parseInt(req.params.spotId, 10);
+        const spotId = parseInt(req.params.spotId);
         //get updated info
         const updates = req.body;
         //get spot
         const spot = await Spot.findByPk(spotId)
+        const spotData = spot.toJSON();
         if(!spot) {
             return res.status(404).json({message: "Spot couldn't be found"})
         }
-        if(spot.ownerId !== req.user.id) {
+        if(spotData.ownerId !== req.user.id) {
             return res.status(401).json({message: "Spot must belong to current User"})
         }
         if(name.length > 50) {
