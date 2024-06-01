@@ -498,10 +498,10 @@ router.put(
         const updates = req.body;
         //get spot
         const spot = await Spot.findByPk(spotId)
-        const spotData = spot.toJSON();
         if(!spot) {
             return res.status(404).json({message: "Spot couldn't be found"})
         }
+        const spotData = spot.toJSON();
         if(spotData.ownerId !== req.user.id) {
             return res.status(401).json({message: "Spot must belong to current User"})
         }
