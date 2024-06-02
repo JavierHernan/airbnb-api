@@ -496,7 +496,7 @@ router.delete(
 
         //FINALLY YOU CAN DESTORY THE SPOT
         await spot.destroy()
-        return res.status(200).json({message: "Spot deleted successfully"})
+        return res.status(200).json({message: "Successfully deleted"})
     }
 )
 
@@ -632,7 +632,9 @@ router.post(
         const formattedStartDate = new Date(startDate);
         const formattedEndDate = new Date(endDate);
         if (formattedEndDate <= formattedStartDate) {
-            return res.status(403).json({ message: "End date must come after start date" });
+            // return res.status(403).json({ message: "End date must come after start date" });
+            return res.status(403).json({ message: "endDate cannot be on or before startDate" });
+
         }
         // if(spot.user_id !== req.user.id) {
         //     return res.status(403).json({message: "Spot must belong to current User"})
@@ -682,7 +684,7 @@ router.post(
         }
         // createdAt: newBooking.getDataValue('createdAt'),
         // updatedAt: newBooking.getDataValue('updatedAt')
-        return res.status(200).json(response)
+        return res.status(201).json(response)
     }
 )
 

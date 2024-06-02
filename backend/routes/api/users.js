@@ -18,7 +18,7 @@ const { handleValidationErrors } = require('../../utils/validation');
       .withMessage("Last Name is required"),
     check('email')
       .notEmpty({checkFalsy: false})
-      .withMessage("Email is required"),
+      .withMessage("Invalid email"),
     check('username')
       .notEmpty({checkFalsy: false})
       .withMessage("User is required"),

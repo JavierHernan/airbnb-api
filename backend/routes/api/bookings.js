@@ -48,7 +48,7 @@ router.get(
         //     }
         // ]
         })
-        const spotIds = bookings.map(booking => booking.spotId);
+        const spotIds = getBookings.map(booking => booking.spotId);
 
         const spots = await Spot.findAll({
             where: {id: spotIds},
