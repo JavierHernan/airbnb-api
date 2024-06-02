@@ -39,6 +39,7 @@ const queryValidation = [
 //Get all Spots
 router.get(
     '/',
+    queryValidation,
     async(req, res, next) => {
         // const {id, address, city, state, country, lat, lng, name, description, price} = req.query;
         const {id, ownerId, address, city, state, country, lat, lng, name, description, price, page = 1, size = 20} = req.query;
