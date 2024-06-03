@@ -42,7 +42,14 @@ router.get(
     queryValidation,
     async(req, res, next) => {
         // const {id, address, city, state, country, lat, lng, name, description, price} = req.query;
-        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, page = 1, size = 20} = req.query;
+        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, page, size} = req.query;
+        
+        //convert
+        const pageNumber = parseInt(page) || 1;
+        const sizeNumber = parseInt(size) || 20;
+
+        if (pageNumber < 1) return res.status(400).json({ message: "Page must be greater than or equal to 1" });
+        if (sizeNumber < 1) return res.status(400).json({ message: "Size must be greater than or equal to 1" });
         
         //search queries
         const filters = {};
@@ -57,10 +64,7 @@ router.get(
         if (name) filters.name = name;
         if (description) filters.description = description;
         if (price) filters.price = price;
-
-        //convert
-        const pageNumber = parseInt(page);
-        const sizeNumber = parseInt(size)
+        
         //pagination
         const spots = await Spot.findAll({
             where: filters,
@@ -614,6 +618,11 @@ router.post(
         const spotId = parseInt(req.params.spotId);
         const {startDate, endDate} = req.body;
         const userId = req.user.id;
+
+        //must have startDate and endDate
+        if(!startDate || !endDate) {
+            return res.status(400).json({message: "must have a startDate and endDate"})
+        }
         //find the actual spot
         const spot = await Spot.findByPk(spotId)
         if(!spot) {
@@ -634,7 +643,7 @@ router.post(
         const formattedEndDate = new Date(endDate);
         if (formattedEndDate <= formattedStartDate) {
             // return res.status(403).json({ message: "End date must come after start date" });
-            return res.status(403).json({ message: "endDate cannot be on or before startDate" });
+            return res.status(403).json({ message: "Bad Request",  errors: "endDate cannot be on or before startDate" });
 
         }
         // if(spot.user_id !== req.user.id) {
@@ -720,11 +729,17 @@ router.get(
                 }],
                 attributes: ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
             })
+            if(!booking) {
+                return res.status(404).json({message: "There are no bookings for this Spot"})
+            }
         } else if(spot && spot.ownerId !== ownerId) {
             booking = await Booking.findAll({
                 where: { spotId: spotId},
                 attributes: ['spotId', 'startDate', 'endDate']
             })
+            if(!booking) {
+                return res.status(404).json({message: "There are no bookings for this Spot"})
+            }
             return res.status(200).json({Bookings: booking})
         }
 
