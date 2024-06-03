@@ -55,6 +55,10 @@ router.get(
             attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price']
         })
 
+        if (!spots.length) {
+            return res.status(404).json({ message: "Spot couldn't be found" });
+        }
+
         const spotImages = await Spot_Image.findAll({
             where: {spotId: spotIds, preview: true},
             attributes: ['spotId', 'url']
@@ -66,14 +70,14 @@ router.get(
         })
 
         spotImages.forEach(image => {
-            if (spotMap[image.spotId]) {
-                spotMap[image.spotId].previewImage = image.url;
+            if (spotObj[image.spotId]) {
+                spotObj[image.spotId].previewImage = image.url;
             }
         });
 
         const response = {
-            Bookings: bookings.map(booking => {
-                const spot = spotMap[booking.spotId] || {};
+            Bookings: getBookings.map(booking => {
+                const spot = spotObj[booking.spotId] || {};
                 return {
                     id: booking.id,
                     spotId: booking.spotId,
