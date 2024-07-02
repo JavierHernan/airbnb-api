@@ -1,5 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+
 
 function SpotTile({spot}) {
     const navigate = useNavigate();
@@ -16,7 +19,10 @@ function SpotTile({spot}) {
                 <div>
                     <div>{spot.city}, {spot.state}</div>
                     <div>{spot.price} night</div>
-                    <div>{spot.avgRating ? spot.avgRating : "New"}</div>
+                    <div>
+                        <FontAwesomeIcon icon={faStar} />
+                        {spot.avgRating ? spot.avgRating : "New"}
+                    </div>
                 </div>
             </div>
         </>
