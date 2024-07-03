@@ -48,14 +48,26 @@ export const fetchSpotDetails = (id) => async (dispatch) => {
 }
 // add spot thunk
 export const createSpot = (spotForm) => async (dispatch) => {
-    const response = await csrfFetch("/api/spots", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(spotForm)
-    });
-    const data = await response.json();
-    dispatch(addSpot(data))
-    return data;
+    try {
+        const options = {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(spotForm)
+        }
+        const response = await csrfFetch("/api/spots", options);
+        if(response.ok) {
+            const data = await response.json();
+            dispatch(addSpot(data))
+            return data;
+        } else {
+            const error = await response.json();
+            throw error
+        }
+        // data.User = spotForm.user
+    } catch(e) {
+        return e
+    }
+    
 }
 
 //initial state

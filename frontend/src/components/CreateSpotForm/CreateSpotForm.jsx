@@ -30,15 +30,15 @@ const CreateSpotForm = () => {
             price,
             previewImage,
             imageUrls,
+            lat: -35.77673,
+            lng: 6.31424
         };
         const data = await dispatch(createSpot(spotInfo))
         console.log("dataCREATESPOTFORM", data)
         if(data.errors) {
             setErrors(data.errors);
         } else {
-            const {id} = useParams();
-
-            navigate(`/api/spots/${id}`)
+            navigate(`/api/spots/${data.id}`)
         }
     }
     return (
