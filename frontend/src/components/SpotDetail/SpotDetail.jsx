@@ -29,7 +29,7 @@ function SpotDetail() {
         alert("Feature coming soon")
     }
 
-    return (
+    return load ? (
         <>
             <div>
                 <h1>{spot.name}</h1>
@@ -85,6 +85,8 @@ function SpotDetail() {
                 </div>
             </div>
         </>
+    ) : (
+        <h1>Loading...</h1>
     )
 }
 
