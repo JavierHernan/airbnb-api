@@ -3,8 +3,9 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import * as sessionActions from './store/session';
-import logo from '..../images/image.png';
+import logo from './images/image.png';
 import SpotList from './components/SpotList/SpotList';
+import SpotDetail from './components/SpotDetail/SpotDetail';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -22,7 +23,8 @@ function Layout() {
         <img src={logo} alt="Airbnb Logo" />
       </header>
       <Navigation isLoaded={isLoaded} />
-      {isLoaded && <Outlet />}
+      {/* {isLoaded && <Outlet />} */}
+      <Outlet />
     </>
   );
 }
@@ -37,8 +39,8 @@ const router = createBrowserRouter([
       },
       {
         path: '/spots/:id',
-        element: <h1>Spot Details</h1>
-      }
+        element: <SpotDetail />
+      },
     ]
   }
 ]);
