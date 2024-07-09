@@ -5,16 +5,20 @@ import SpotTile from './SpotTile';
 
 function SpotList() {
   const dispatch = useDispatch();
-  const spots = useSelector(state => state.spots.spots); //
+  const spots = useSelector(state => state.spots.allSpots); //
   console.log("spots",spots)
 
+  const spotList = Object.values(spots) //converts spots object to array
+  // console.log("spotList", spotList)
+
   useEffect(() => {
+    console.log("useEffect Test SPOTLIST")
     dispatch(fetchSpots());
   }, [dispatch]);
 
   return (
     <div className="spot-list">
-      {spots.map(spot => (
+      {spotList.map((spot) => (
         <SpotTile key={spot.id} spot={spot} />
       ))}
     </div>
