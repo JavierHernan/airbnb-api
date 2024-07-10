@@ -11,7 +11,7 @@ const router = express.Router();
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 
-//
+// delete a spot image
 router.delete(
     '/:imageId',
     requireAuth,
@@ -27,8 +27,9 @@ router.delete(
         console.log("image", image)
         const spot = await Spot.findByPk(image.spotId)
         // console.log("spot.owner_id", spot.owner_id)
-        if (spot.ownerId !== req.user.id) {
-            return res.status(401).json({ message: "User must own Spot to delete the Spot Image" });
+        const spotData = spot.toJSON();
+        if (spotData.ownerId !== req.user.id) {
+            return res.status(401).json({ message: "Spot must belong to current User" });
         }
 
         await image.destroy()
