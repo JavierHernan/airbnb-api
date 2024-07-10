@@ -12,9 +12,15 @@ function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
-        <ProfileButton user={sessionUser} />
-      </li>
+      <>
+        <li>
+          <NavLink to="/spots/new">Create a New Spot</NavLink>
+        </li>
+        <li>
+          <ProfileButton user={sessionUser} />
+        </li>
+      </>
+      
     );
   } else {
     sessionLinks = (

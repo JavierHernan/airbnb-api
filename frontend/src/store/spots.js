@@ -2,7 +2,8 @@ import { csrfFetch } from './csrf';
 
 //constants
 const SET_SPOTS = 'spots/setSpots';
-const SPOT_DETAILS = 'spots/spotDetails'
+const SPOT_DETAILS = 'spots/spotDetails';
+const ADD_SPOT = 'spots/addSpot';
 
 
 //action creator
@@ -19,6 +20,11 @@ const spotDetails = (spot) => {
         payload: spot
     }
 }
+//add spot action
+const addSpot = (spot) => ({
+    type: ADD_SPOT,
+    payload: spot
+})
 
 //thunk / action creator
 export const fetchSpots = () => async (dispatch) => {
@@ -39,6 +45,29 @@ export const fetchSpotDetails = (id) => async (dispatch) => {
     // console.log("Details data", data)
     dispatch(spotDetails(data));
     return response;
+}
+// add spot thunk
+export const createSpot = (spotForm) => async (dispatch) => {
+    try {
+        const options = {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(spotForm)
+        }
+        const response = await csrfFetch("/api/spots", options);
+        if(response.ok) {
+            const data = await response.json();
+            dispatch(addSpot(data))
+            return data;
+        } else {
+            const error = await response.json();
+            throw error
+        }
+        // data.User = spotForm.user
+    } catch(e) {
+        return e
+    }
+    
 }
 
 //initial state
@@ -74,7 +103,13 @@ const spotsReducer = (state = initialState, action) => {
             newState[action.payload.id] = action.payload
             newState.byId = {...newState.byId, [action.payload.id]: action.payload}
             // console.log("newState2", newState)
+            return newState;
+        case ADD_SPOT:
+            newState = {... state};
+            newState.allSpots = [action.payload, ...newState.allSpots];
+            newState.byId = {...newState.byId, [action.payload.id]: action.payload}
             return newState
+
         default:
             return state;
     }
