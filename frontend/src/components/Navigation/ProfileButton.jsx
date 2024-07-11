@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
+import { useNavigate } from 'react-router-dom';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -13,6 +15,12 @@ function ProfileButton({ user }) {
     // if (!showMenu) setShowMenu(true);
     setShowMenu(!showMenu);
   };
+
+  const manageHandler = () => {
+    // e.preventDefault()
+    console.log("TEST")
+    navigate('/manage-spots')
+}
 
   useEffect(() => {
     if (!showMenu) return;
@@ -44,6 +52,9 @@ function ProfileButton({ user }) {
         <li>{user.username}</li>
         <li>{user.firstName} {user.lastName}</li>
         <li>{user.email}</li>
+        <li>
+          <button onClick={manageHandler}>Manage Spots</button>
+          </li>
         <li>
           <button onClick={logout}>Log Out</button>
         </li>
