@@ -5,11 +5,14 @@ import { fetchSpotDetails } from "../../store/spots";
 import { fetchReviews } from "../../store/reviews";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+import React from "react";
+import CreateReviewFormModal from "../CreateReviewModal/CreateReviewFormModal";
 
 function SpotDetail() {
     const dispatch = useDispatch();
     const { id } = useParams();
     const [load, setLoad] = useState(false)
+    const [showModal, setShowModal] = useState(false);
     // console.log("id", id)
 
     useEffect(() => {
@@ -24,6 +27,7 @@ function SpotDetail() {
     console.log("spot123", spot)
     const review = useSelector(state => state.reviews)
     // console.log("reviews REVIEW", review)
+    const sessionUser = useSelector(state => state.session.user)
 
     const handleReserve = () => {
         alert("Feature coming soon")
