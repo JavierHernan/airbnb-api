@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSpot } from '../../store/spots';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CreateSpotForm = () => {
     const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const CreateSpotForm = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [imageUrls, setImageUrls] = useState(['', '', '', '', '']);
     const [errors, setErrors] = useState([]);
+    const [load, setLoad] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -35,20 +36,29 @@ const CreateSpotForm = () => {
         };
         const data = await dispatch(createSpot(spotInfo))
         console.log("dataCREATESPOTFORM", data)
-        if(data.errors) {
-            setErrors(data.errors);
+        const newData = await data.json();
+        console.log("NEWDATA", newData)
+        if(newData.message) {
+            console.log("IF ERRORS", errors)
+            const newErrors = [...errors, newData]
+            setErrors(newErrors)
+            
         } else {
-            navigate(`/api/spots/${data.id}`)
+            navigate(`/spots/${newData.id}`)
         }
     }
+    // console.log("ERRORS AFTER SETERRORS", errors)
     return (
         <form onSubmit={handleSubmit}>
             <h1>Create a New Spot</h1>
             {errors.length > 0 && (
                 <ul>
-                    {errors.map((error, index) => (
-                        <li key={index}>{error}</li>
-                    ))}
+                    {errors.map((error, index) => {
+                        console.log("MAP ERROR", error.message)
+                        return (
+                            <li key={index}>{error.message}</li>
+                        )
+                    })}
                 </ul>
             )}
             <div>
@@ -148,9 +158,12 @@ const CreateSpotForm = () => {
                     ))
                 }
             </div>
-            <button type='submit'>Create Spot</button>
+            <button 
+                type='submit' 
+                // disabled={errors.length > 0 ? 'true' : 'false'}
+            >Create Spot</button>
         </form>
-    )
+    ) 
 }
 
 export default CreateSpotForm
