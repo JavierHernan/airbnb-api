@@ -6,13 +6,12 @@ import { fetchReviews } from "../../store/reviews";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import React from "react";
-import CreateReviewFormModal from "../CreateReviewModal/CreateReviewFormModal";
+import ReviewComponent from "../Review/Review";
 
 function SpotDetail() {
     const dispatch = useDispatch();
     const { id } = useParams();
     const [load, setLoad] = useState(false)
-    const [showModal, setShowModal] = useState(false);
     // console.log("id", id)
 
     useEffect(() => {
@@ -76,12 +75,17 @@ function SpotDetail() {
                     }
                     {review.allReviews.length > 0 ? (
                         review.allReviews.map((review, index) => (
-                            <div key={index}>
-                                <p>{review.User.firstName} firstNameIndicator</p>
-                                <p>{new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
-                                <p>{review.review} reviewIndicator</p>
-                                <p>{review.stars} stars</p>
-                            </div>
+                            // <div key={index}>
+                            //     <p>{review.User.firstName} firstNameIndicator</p>
+                            //     <p>{new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
+                            //     <p>{review.review} reviewIndicator</p>
+                            //     <p>{review.stars} stars</p>
+                            // </div> //move to Review.jsx
+                            <ReviewComponent 
+                                key={index}
+                                review={review}
+                                sessionUser={sessionUser}
+                            />
                         ))
                     ) : (
                         <p>Be the first to post a review!</p>
