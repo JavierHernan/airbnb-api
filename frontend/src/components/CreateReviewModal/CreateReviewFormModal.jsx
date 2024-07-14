@@ -2,11 +2,14 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createReview } from "../../store/reviews";
 
+
 function CreateReviewFormModal({spotId, onClose}) {
     const dispatch = useDispatch();
     const [review, setReview] = useState('');
     const [stars, setStars] = useState(0);
     const [errors, setErrors] = useState([]);
+    const sessionUser = useSelector(state => state.session.user);
+    const [showModal, setShowModal] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

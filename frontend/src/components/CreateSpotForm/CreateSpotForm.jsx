@@ -36,15 +36,19 @@ const CreateSpotForm = () => {
         };
         const data = await dispatch(createSpot(spotInfo))
         console.log("dataCREATESPOTFORM", data)
-        const newData = await data.json();
+        const newData = await data.json(); //already jsonning from spots.js in create a spot Thunk. This is the response.
         console.log("NEWDATA", newData)
-        if(newData.message) {
+        if(newData.errors) {
             console.log("IF ERRORS", errors)
-            const newErrors = [...errors, newData]
+            console.log("newData.errors", newData.errors)
+            // const newErrors = [...errors, ...newData.errors]
+            const newErrors = Object.values(newData.errors)
+            console.log("newErrors", newErrors)
             setErrors(newErrors)
             
-        } else {
-            navigate(`/spots/${newData.id}`)
+        } 
+        else {
+            navigate(`/spots/${data.id}`)
         }
     }
     // console.log("ERRORS AFTER SETERRORS", errors)
@@ -54,9 +58,9 @@ const CreateSpotForm = () => {
             {errors.length > 0 && (
                 <ul>
                     {errors.map((error, index) => {
-                        console.log("MAP ERROR", error.message)
+                        console.log("MAP ERROR", error)
                         return (
-                            <li key={index}>{error.message}</li>
+                            <li key={index}>{error}</li>
                         )
                     })}
                 </ul>
@@ -70,7 +74,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -79,7 +83,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -88,7 +92,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -97,7 +101,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={state}
                         onChange={(e) => setState(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
             </div>
@@ -108,7 +112,7 @@ const CreateSpotForm = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder='Please write at least 30 characters'
-                    required
+                    // required
                 />
             </div>
             <div>
@@ -119,7 +123,7 @@ const CreateSpotForm = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder='Name of your spot'
-                    required
+                    // required
                 />
             </div>
             <div>
@@ -130,7 +134,7 @@ const CreateSpotForm = () => {
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder='Price per night (USD)'
-                    required
+                    // required
                 />
             </div>
             <div>
