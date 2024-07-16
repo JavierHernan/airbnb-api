@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
@@ -13,7 +13,24 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const { closeModal } = useModal();
+
+  useEffect(() => {
+    // Check if any field is empty
+    if (
+      email &&
+      username.length >= 4 &&
+      firstName &&
+      lastName &&
+      password.length >= 6 &&
+      confirmPassword
+    ) {
+      setIsButtonDisabled(false);
+    } else {
+      setIsButtonDisabled(true);
+    }
+  }, [email, username, firstName, lastName, password, confirmPassword]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,7 +48,9 @@ function SignupFormModal() {
         .then(closeModal)
         .catch(async (res) => {
           const data = await res.json();
+          console.log("data SIGNUP", data)
           if (data?.errors) {
+            console.log("DATA.ERRORS", data.errors)
             setErrors(data.errors);
           }
         });
@@ -51,7 +70,7 @@ function SignupFormModal() {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            // required
           />
         </label>
         {errors.email && <p>{errors.email}</p>}
@@ -61,7 +80,7 @@ function SignupFormModal() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
+            // required
           />
         </label>
         {errors.username && <p>{errors.username}</p>}
@@ -71,7 +90,7 @@ function SignupFormModal() {
             type="text"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            required
+            // required
           />
         </label>
         {errors.firstName && <p>{errors.firstName}</p>}
@@ -81,7 +100,7 @@ function SignupFormModal() {
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            required
+            // required
           />
         </label>
         {errors.lastName && <p>{errors.lastName}</p>}
@@ -91,7 +110,7 @@ function SignupFormModal() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            // required
           />
         </label>
         {errors.password && <p>{errors.password}</p>}
@@ -101,13 +120,13 @@ function SignupFormModal() {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            required
+            // required
           />
         </label>
         {errors.confirmPassword && (
           <p>{errors.confirmPassword}</p>
         )}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={isButtonDisabled}>Sign Up</button>
       </form>
     </>
   );

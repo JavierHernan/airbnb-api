@@ -35,10 +35,21 @@ const { handleValidationErrors } = require('../../utils/validation');
     //   .isLength({ min: 4 })
     //   .notEmpty({checkFalsy: true})
     //   .withMessage('Please provide a username with at least 4 characters.'),
+    check('email')
+    .isEmail()
+    .withMessage('Invalid email address'),
     check('username')
+      .isLength({ min: 4 })
+      .withMessage('Please provide a username with at least 4 characters.')
       .not()
       .isEmail()
-      .withMessage('Username cannot be an email.'),
+      .withMessage('Username cannot be an email.')
+      .custom(async (value) => {
+        const user = await User.findOne({ where: { username: value } });
+        if (user) {
+          throw new Error('Username already exists');
+        }
+      }),
     // check('username')
     //   // .notEmpty({checkFalsy: true})
     //   .exists({checkFalsy: true})

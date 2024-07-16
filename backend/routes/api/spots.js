@@ -175,6 +175,10 @@ const validateSpot = [
         .withMessage('Price per day is required')
         .isFloat({min: 0})
         .withMessage('Price per day is required'),
+    check('previewImage')
+        .optional({ nullable: true }) // Only the first image URL is required
+        .isURL()
+        .withMessage('Must include valid Preview Image URL'),
     handleValidationErrors
 ]
 //create a spot
@@ -183,7 +187,9 @@ router.post(
     requireAuth,
     validateSpot,
     async (req, res) => {
-        const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.body;//
+        // const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.body;//
+        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, previewImage} = req.body;//
+
         //get the owner id, which is current user
         const owner_Id = req.user.id;//
         if(name.length > 50) {
@@ -580,8 +586,10 @@ router.post(
     async (req, res) => {
         //get spotId
         const spotId = parseInt(req.params.spotId, 10);
+        // console.log("BACKEND SPOTID", spotId)
         //get new review data from req.body
         const {review, stars} = req.body;
+        console.log("BACKEND REQ.BODY", req.body)
         const userId = req.user.id
         const spot = await Spot.findByPk(spotId)
         if(!spot) {

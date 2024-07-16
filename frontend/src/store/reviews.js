@@ -33,13 +33,15 @@ export const fetchReviews = (spotId) => async (dispatch) => {
   };
 //create review thunk
 export const createReview = (spotId, review) => async (dispatch) => {
+  console.log("SPOTID AND REVIEW CREATE REVIEW THUNK", spotId, review)
   try {
     const options = {
       method: 'POST',
-      headers: {'Content-Type': 'application.json'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(review)
     }
     const response = await csrfFetch(`/api/spots/${spotId}/reviews`, options)
+    console.log("createReviewTHUNK RESPONSE", response)
     if(response.ok) {
       const data = await response.json();
       dispatch(addReview(data))
@@ -48,8 +50,8 @@ export const createReview = (spotId, review) => async (dispatch) => {
       const error = await response.json()
       throw error
     }
-  } catch(e) {
-    return e
+  } catch(error) {
+    return error
   }
 }
 //delete review thunk

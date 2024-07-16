@@ -23,12 +23,13 @@ const ReviewComponent = ({ review }) => {
     };
 
     return (
-        <div className="review-tile">
-            <p>{review.User.firstName} firstNameIndicator</p>
-            <p>{new Date(review.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
-            <p>{review.review} reviewIndicator</p>
-            <p>{review.stars} stars</p>
-            {sessionUser && sessionUser.id === review.userId && (
+        <>
+            <div className="review-tile">
+            <p>{review?.User?.firstName} firstNameIndicator</p>
+            <p>{new Date(review?.createdAt)?.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
+            <p>{review?.review} reviewIndicator</p>
+            <p>{review?.stars} stars</p>
+            {sessionUser && sessionUser?.id === review?.userId && (
                 <button onClick={handleDeleteClick}>Delete</button>
             )}
             <DeleteReviewConfirmationModal
@@ -41,6 +42,7 @@ const ReviewComponent = ({ review }) => {
                 cancelText="No (Keep Review)"
             />
         </div>
+        </>
     );
 }
 

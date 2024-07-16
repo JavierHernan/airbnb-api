@@ -18,14 +18,55 @@ const UpdateSpotForm = () => {
     const [price, setPrice] = useState('');
     const [errors, setErrors] = useState([]);
 
+    useEffect(() => {
+        const fetchAndSetSpotDetails = async () => {
+            const response = await dispatch(fetchSpotDetails(id));
+            if (response.ok) {
+                console.log("RESPONSE")
+                // Spot details are now in Redux store, use `useSelector` to access them
+            }
+        };
+        fetchAndSetSpotDetails();
+    }, [dispatch, id]);
+
+    useEffect(() => {
+        if (spot) {
+            setCountry(spot.country || '');
+            setAddress(spot.address || '');
+            setCity(spot.city || '');
+            setState(spot.state || '');
+            setDescription(spot.description || '');
+            setName(spot.name || '');
+            setPrice(spot.price || '');
+        }
+    }, [spot]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("HANDLEUPDATE TEST")
         const newSpotDetails = {
-            county, address, city, state, description, name, price
+            country, 
+            address, 
+            city, 
+            state, 
+            description, 
+            name, 
+            price, 
+            lat: -35.77673,
+            lng: 6.31424
         }
         const data = await dispatch(updateSpotThunk(id, newSpotDetails));
-        if(data.errors) {
-            setErrors(data.errors)
+        console.log("UPDATE DATA", data)
+        if(data instanceof Response) {
+            var newDataUpdate = await data.json();
+            console.log("NEWDATAUPDATE", newDataUpdate)
+            if(newDataUpdate.errors) {
+                console.log("IF ERRORS", errors)
+                console.log("newData.errors", newDataUpdate.errors)
+                const newErrors = Object.values(newDataUpdate.errors)
+                console.log("NEWERRORS", newErrors)
+                setErrors(newErrors)
+            }
         } else {
             navigate(`/spots/${id}`)
         }
@@ -35,7 +76,16 @@ const UpdateSpotForm = () => {
         <>
             <form onSubmit={handleSubmit}>
                 <h1>Update your Spot</h1>
-                {/* {errors} */}
+                {errors.length > 0 && (
+                <ul>
+                    {errors.map((error, index) => {
+                        console.log("MAP ERROR", error)
+                        return (
+                            <li key={index}>{error}</li>
+                        )
+                    })}
+                </ul>
+            )}
                 <div>
                     <label>
                         Country
@@ -43,7 +93,7 @@ const UpdateSpotForm = () => {
                             type='text'
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}
-                            required
+                            // required
                         />
                     </label>
                     <label>
@@ -52,7 +102,7 @@ const UpdateSpotForm = () => {
                             type='text'
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            required
+                            // required
                         />
                     </label>
                     <label>
@@ -61,7 +111,7 @@ const UpdateSpotForm = () => {
                             type='text'
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
-                            required
+                            // required
                         />
                     </label>
                     <label>
@@ -70,7 +120,7 @@ const UpdateSpotForm = () => {
                             type='text'
                             value={state}
                             onChange={(e) => setState(e.target.value)}
-                            required
+                            // required
                         />
                     </label>
                 </div>
@@ -90,7 +140,7 @@ const UpdateSpotForm = () => {
                             type='text'
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            required
+                            // required
                         />
                     </label>
                 </div>
@@ -101,7 +151,7 @@ const UpdateSpotForm = () => {
                             type='number'
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
-                            required
+                            // required
                         />
                     </label>
                 </div>

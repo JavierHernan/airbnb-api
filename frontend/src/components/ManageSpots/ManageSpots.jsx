@@ -8,6 +8,8 @@ const ManageSpots = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const spots = useSelector(state => state.spots.userSpots)
+    console.log("spots", spots)
+    console.log("spots.length", spots.length)
     const sessionUser = useSelector(state => state.session.user)
     const [showModal, setShowModal] = useState(false);
     const [deleteSpot, setDeleteSpot] = useState(null);

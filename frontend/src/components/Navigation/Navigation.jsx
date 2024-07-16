@@ -42,12 +42,15 @@ function Navigation({ isLoaded }) {
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {isLoaded && sessionLinks}
-    </ul>
+    <div className='nav-container'>
+      <ul>
+        <li>
+          <NavLink to="/">Home</NavLink>
+        </li>
+        {isLoaded && sessionLinks}
+      </ul>
+    </div>
+    
   );
 }
 

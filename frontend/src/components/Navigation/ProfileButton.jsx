@@ -38,7 +38,9 @@ function ProfileButton({ user }) {
 
   const logout = (e) => {
     e.preventDefault();
-    dispatch(sessionActions.logout());
+    dispatch(sessionActions.logout()).then(() => {
+      navigate('/'); // Navigate to home or login page after logout
+    });
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
