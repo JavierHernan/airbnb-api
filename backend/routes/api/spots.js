@@ -471,43 +471,85 @@ router.delete(
     requireAuth,
     async (req, res) => {
         const spotId = parseInt(req.params.spotId, 10);
-        //get spot by spot id
-        const spot = await Spot.findByPk(spotId);
+        try {
+            // const spot = await Spot.findByPk(spotId);
 
-        if(!spot) {
-            return res.status(404).json({message: "Spot couldn't be found"})
-        }
-        if(spot.ownerId !== req.user.id) {
-            return res.status(401).json({message: "Spot must belong to current User"})
-        }
+            // if (!spot) {
+            //     return res.status(404).json({ message: "Spot couldn't be found" })
+            // }
+            // if (spot.ownerId !== req.user.id) {
+            //     return res.status(401).json({ message: "Spot must belong to current User" })
+            // }
 
-        const reviews = await Review.findAll({
-            where: { spotId: spotId }
-        });
-        //DESTROY ALL STUFF ASSOCIATED WITH THE SPOT FIRSSTTT!!!!
-        const bookings = await Booking.findAll({ where: { spotId: spotId } });
-        // await Promise.all(bookings.map(booking => booking.destroy()));
-        bookings.map(booking => booking.destroy())
+            // const reviews = await Review.findAll({
+            //     where: { spotId: spotId }
+            // });
+            // //DESTROY ALL STUFF ASSOCIATED WITH THE SPOT FIRSSTTT!!!!
+            // const bookings = await Booking.findAll({ where: { spotId: spotId } });
+            // // await Promise.all(bookings.map(booking => booking.destroy()));
+            // bookings.map(booking => booking.destroy())
 
-        const spotImages = await Spot_Image.findAll({ where: { spotId: spotId } });
-        // await Promise.all(spotImages.map(spotImage => spotImage.destroy()));
-        spotImages.map(spotImage => spotImage.destroy())
+            // const spotImages = await Spot_Image.findAll({ where: { spotId: spotId } });
+            // // await Promise.all(spotImages.map(spotImage => spotImage.destroy()));
+            // spotImages.map(spotImage => spotImage.destroy())
 
-        // await Promise.all(reviews.map(async (review) => {
-        //     const reviewImages = await Review_Image.findAll({ where: { reviewId: review.id } });
-        //     await Promise.all(reviewImages.map(reviewImage => reviewImage.destroy()));
-        // }));
-        reviews.map((review) => {
-            const reviewImages = Review_Image.findAll({ where: { reviewId: review.id } });
-            reviewImages.map(reviewImage => reviewImage.destroy());
-        })
+            // // await Promise.all(reviews.map(async (review) => {
+            // //     const reviewImages = await Review_Image.findAll({ where: { reviewId: review.id } });
+            // //     await Promise.all(reviewImages.map(reviewImage => reviewImage.destroy()));
+            // // }));
+            // reviews.map((review) => {
+            //     const reviewImages = Review_Image.findAll({ where: { reviewId: review.id } });
+            //     reviewImages.map(reviewImage => reviewImage.destroy());
+            // })
 
-        // await Promise.all(reviews.map(review => review.destroy()));
-        reviews.map(review => review.destroy())
+            // // await Promise.all(reviews.map(review => review.destroy()));
+            // reviews.map(review => review.destroy())
 
-        //FINALLY YOU CAN DESTORY THE SPOT
-        await spot.destroy()
-        return res.status(200).json({message: "Successfully deleted"})
+            // //FINALLY YOU CAN DESTORY THE SPOT
+            // await spot.destroy()
+            // return res.status(200).json({ message: "Successfully deleted" })
+
+            // Get spot by spot id
+            const spot = await Spot.findByPk(spotId);
+
+            if (!spot) {
+                return res.status(404).json({ message: "Spot couldn't be found" });
+            }
+            if (spot.ownerId !== req.user.id) {
+                return res.status(401).json({ message: "Spot must belong to current User" });
+            }
+
+            // Destroy all associated entities
+            const reviews = await Review.findAll({ where: { spotId: spotId } });
+            const bookings = await Booking.findAll({ where: { spotId: spotId } });
+            const spotImages = await Spot_Image.findAll({ where: { spotId: spotId } });
+
+            console.log('Bookings:', bookings);
+            console.log('Spot Images:', spotImages);
+            console.log('Reviews:', reviews);
+
+            // Destroy bookings
+            await Promise.all(bookings.map(booking => booking.destroy()));
+
+            // Destroy spot images
+            await Promise.all(spotImages.map(spotImage => spotImage.destroy()));
+
+            // Destroy review images and reviews
+            await Promise.all(reviews.map(async (review) => {
+                const reviewImages = await Review_Image.findAll({ where: { reviewId: review.id } });
+                console.log('Review Images for review ID', review.id, ':', reviewImages);
+                await Promise.all(reviewImages.map(reviewImage => reviewImage.destroy()));
+                await review.destroy();
+            }));
+
+            // Finally, destroy the spot
+            await spot.destroy();
+
+            return res.status(200).json({ message: "Successfully deleted" });
+        } catch (error) {
+            console.error('Error deleting spot:', error);
+            return res.status(500).json({ message: 'Internal server error' });
+        }        
     }
 )
 

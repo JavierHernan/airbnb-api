@@ -60,7 +60,7 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
     const option = {method: 'DELETE'}
     const response = await csrfFetch(`/api/reviews/${reviewId}`, option)
     if(response.ok) {
-      const data = await response.json()
+      // const data = await response.json()
       dispatch(deleteReview(reviewId))
     } else {
       const error = await response.json()
