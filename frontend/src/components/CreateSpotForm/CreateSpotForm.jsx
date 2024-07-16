@@ -35,19 +35,55 @@ const CreateSpotForm = () => {
             lng: 6.31424
         };
         const data = await dispatch(createSpot(spotInfo))
+    
         console.log("dataCREATESPOTFORM", data)
-        const newData = await data.json(); //already jsonning from spots.js in create a spot Thunk. This is the response.
-        console.log("NEWDATA", newData)
-        if(newData.errors) {
-            console.log("IF ERRORS", errors)
-            console.log("newData.errors", newData.errors)
-            // const newErrors = [...errors, ...newData.errors]
-            const newErrors = Object.values(newData.errors)
-            console.log("newErrors", newErrors)
-            setErrors(newErrors)
-            
-        } 
-        else {
+        // if(data instanceof Response || !previewImage) { 
+        //     if(data instanceof Response && !previewImage) {
+        //         var newDataCreate = await data.json();
+        //         console.log("NEWDATA", newDataCreate)
+        //         if(newDataCreate.message === 'This Spot already exists') {
+        //             console.log("NEWDATA.MESSAGETEST")
+        //             setErrors([newDataCreate.message])
+        //         } else if (newDataCreate.errors) {
+        //             newDataCreate.errors.previewImage = "Preview Image is required";
+        //             const newErrors = Object.values(newDataCreate.errors)
+        //             setErrors(newErrors)
+        //         }
+        //     } else if(data instanceof Response && previewImage) {
+        //         var newDataCreate = await data.json();
+        //         if(newDataCreate.message === 'This Spot already exists') {
+        //             console.log("NEWDATA.MESSAGETEST")
+        //             setErrors([newDataCreate.message])
+        //         } else if (newDataCreate.errors) {
+        //             const newErrors = Object.values(newDataCreate.errors)
+        //             setErrors(newErrors)
+        //         }
+        //     } else if (!previewImage) {
+        //         const previewImageError = "Preview Image is required";
+        //         setErrors([previewImageError])
+        //     }
+        // }else {
+        //     navigate(`/spots/${data.id}`)
+        // }
+        if(data instanceof Response) {
+            var newDataCreate = await data.json(); //already jsonning from spots.js in create a spot Thunk. This is the response.
+            console.log("NEWDATA", newDataCreate)
+            if(newDataCreate.message === 'This Spot already exists') {
+                console.log("NEWDATA.MESSAGETEST")
+                // const newError = Object.values(newData.message)
+                setErrors([newDataCreate.message])
+            } else if (newDataCreate.errors) {
+                console.log("IF ERRORS", errors)
+                console.log("newData.errors", newDataCreate.errors)
+                // if(!previewImage) {
+                //     newDataCreate.errors.previewImage = "Preview Image is required";
+                // }
+                // const newErrors = [...errors, ...newData.errors]
+                const newErrors = Object.values(newDataCreate.errors)
+                console.log("newErrors", newErrors)
+                setErrors(newErrors)
+            }
+        }  else {
             navigate(`/spots/${data.id}`)
         }
     }

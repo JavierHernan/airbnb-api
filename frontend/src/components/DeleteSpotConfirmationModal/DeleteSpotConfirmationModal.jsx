@@ -1,4 +1,6 @@
 import React from 'react';
+import './DeleteSpotConfirmationModal.css';
+
 
 const DeleteSpotConfirmationModal = ({show, onClose, onConfirm}) => {
     if (!show) {
@@ -6,7 +8,7 @@ const DeleteSpotConfirmationModal = ({show, onClose, onConfirm}) => {
     }
 
     return (
-        <div >
+        <div className='delete-spot-outer'>
             <div >
                 <h2>Confirm Delete</h2>
                 <p>Are you sure you want to remove this spot?</p>
