@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSpots } from '../../store/spots';
 import SpotTile from './SpotTile';
+import './SpotList.css'
 
 function SpotList() {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ function SpotList() {
   }, [dispatch]);
 
   return (
-    <div className="spot-list">
+    <div className="spot-list-container">
       {spotList.map((spot) => (
         <SpotTile key={spot.id} spot={spot} />
       ))}

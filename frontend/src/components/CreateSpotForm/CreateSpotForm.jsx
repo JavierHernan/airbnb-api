@@ -35,16 +35,56 @@ const CreateSpotForm = () => {
             lng: 6.31424
         };
         const data = await dispatch(createSpot(spotInfo))
+    
         console.log("dataCREATESPOTFORM", data)
-        const newData = await data.json();
-        console.log("NEWDATA", newData)
-        if(newData.message) {
-            console.log("IF ERRORS", errors)
-            const newErrors = [...errors, newData]
-            setErrors(newErrors)
-            
-        } else {
-            navigate(`/spots/${newData.id}`)
+        // if(data instanceof Response || !previewImage) { 
+        //     if(data instanceof Response && !previewImage) {
+        //         var newDataCreate = await data.json();
+        //         console.log("NEWDATA", newDataCreate)
+        //         if(newDataCreate.message === 'This Spot already exists') {
+        //             console.log("NEWDATA.MESSAGETEST")
+        //             setErrors([newDataCreate.message])
+        //         } else if (newDataCreate.errors) {
+        //             newDataCreate.errors.previewImage = "Preview Image is required";
+        //             const newErrors = Object.values(newDataCreate.errors)
+        //             setErrors(newErrors)
+        //         }
+        //     } else if(data instanceof Response && previewImage) {
+        //         var newDataCreate = await data.json();
+        //         if(newDataCreate.message === 'This Spot already exists') {
+        //             console.log("NEWDATA.MESSAGETEST")
+        //             setErrors([newDataCreate.message])
+        //         } else if (newDataCreate.errors) {
+        //             const newErrors = Object.values(newDataCreate.errors)
+        //             setErrors(newErrors)
+        //         }
+        //     } else if (!previewImage) {
+        //         const previewImageError = "Preview Image is required";
+        //         setErrors([previewImageError])
+        //     }
+        // }else {
+        //     navigate(`/spots/${data.id}`)
+        // }
+        if(data instanceof Response) {
+            var newDataCreate = await data.json(); //already jsonning from spots.js in create a spot Thunk. This is the response.
+            console.log("NEWDATA", newDataCreate)
+            if(newDataCreate.message === 'This Spot already exists') {
+                console.log("NEWDATA.MESSAGETEST")
+                // const newError = Object.values(newData.message)
+                setErrors([newDataCreate.message])
+            } else if (newDataCreate.errors) {
+                console.log("IF ERRORS", errors)
+                console.log("newData.errors", newDataCreate.errors)
+                // if(!previewImage) {
+                //     newDataCreate.errors.previewImage = "Preview Image is required";
+                // }
+                // const newErrors = [...errors, ...newData.errors]
+                const newErrors = Object.values(newDataCreate.errors)
+                console.log("newErrors", newErrors)
+                setErrors(newErrors)
+            }
+        }  else {
+            navigate(`/spots/${data.id}`)
         }
     }
     // console.log("ERRORS AFTER SETERRORS", errors)
@@ -54,9 +94,9 @@ const CreateSpotForm = () => {
             {errors.length > 0 && (
                 <ul>
                     {errors.map((error, index) => {
-                        console.log("MAP ERROR", error.message)
+                        console.log("MAP ERROR", error)
                         return (
-                            <li key={index}>{error.message}</li>
+                            <li key={index}>{error}</li>
                         )
                     })}
                 </ul>
@@ -70,7 +110,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={country}
                         onChange={(e) => setCountry(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -79,7 +119,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -88,7 +128,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -97,7 +137,7 @@ const CreateSpotForm = () => {
                         type='text'
                         value={state}
                         onChange={(e) => setState(e.target.value)}
-                        required
+                        // required
                     />
                 </label>
             </div>
@@ -108,7 +148,7 @@ const CreateSpotForm = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder='Please write at least 30 characters'
-                    required
+                    // required
                 />
             </div>
             <div>
@@ -119,7 +159,7 @@ const CreateSpotForm = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder='Name of your spot'
-                    required
+                    // required
                 />
             </div>
             <div>
@@ -130,7 +170,7 @@ const CreateSpotForm = () => {
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
                     placeholder='Price per night (USD)'
-                    required
+                    // required
                 />
             </div>
             <div>

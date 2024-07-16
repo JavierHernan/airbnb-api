@@ -1,17 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { manageSpotsThunk } from '../../store/spots';
+import { useNavigate } from 'react-router-dom';
+import { deleteSpotThunk, manageSpotsThunk } from '../../store/spots';
+import DeleteSpotConfirmationModal from '../DeleteReviewConfirmationModal/DeleteReviewConfirmationModal';
 
 const ManageSpots = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const spots = useSelector(state => state.spots.userSpots)
+    console.log("spots", spots)
+    console.log("spots.length", spots.length)
     const sessionUser = useSelector(state => state.session.user)
+    const [showModal, setShowModal] = useState(false);
+    const [deleteSpot, setDeleteSpot] = useState(null);
 
     useEffect(() => {
         if (sessionUser) {
             dispatch(manageSpotsThunk())
         }
     }, [dispatch, sessionUser])
+
+    const update = (spotId) => {
+        navigate(`/spots/${spotId}/edit`);
+    }
+    const deleteHandler = (spotId) => {
+        setDeleteSpot(spotId)
+        setShowModal(true)
+    }
+    const deleteConfirm = () => {
+        dispatch(deleteSpotThunk(deleteSpot)).then(() => {
+            setShowModal(false)
+            setDeleteSpot(null);
+            dispatch(manageSpotsThunk())
+        })
+    }
+    const closeModal = () => {
+        setShowModal(false)
+        setDeleteSpot(null)
+    }
 
     return (
         <>
@@ -31,14 +57,19 @@ const ManageSpots = () => {
                                     <h2>{spot.name}</h2>
                                     <p>{spot.city}, {spot.state}</p>
                                     <p>${spot.price} / night</p>
-                                    <button onClick={(e) => { e.stopPropagation(); handleUpdate(spot.id); }}>Update</button>
-                                    <button onClick={(e) => { e.stopPropagation(); handleDelete(spot.id); }}>Delete</button>
+                                    <button onClick={(e) => { e.stopPropagation(); update(spot.id); }}>Update</button>
+                                    <button onClick={(e) => { e.stopPropagation(); deleteHandler(spot.id); }}>Delete</button>
                                 </div>
                             </div>
                         ))}
                     </div>
                 )}
             </div>
+            <DeleteSpotConfirmationModal 
+                show={showModal}
+                onClose={closeModal}
+                onConfirm={deleteConfirm}
+            />
         </>
     )
 }

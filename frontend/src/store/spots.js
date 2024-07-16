@@ -5,7 +5,8 @@ const SET_SPOTS = 'spots/setSpots';
 const SPOT_DETAILS = 'spots/spotDetails';
 const ADD_SPOT = 'spots/addSpot';
 const MANAGE_SPOTS = 'spots/manageSpots';
-
+const UPDATE_SPOT = 'spots/updateSpot';
+const DELETE_SPOT = 'spots/deleteSpot';
 
 //action creator
 const setSpots = (spots) => {
@@ -31,6 +32,16 @@ const manageSpots = (spots) => ({
     type: MANAGE_SPOTS,
     payload: spots
 })
+//update spot action
+const updateSpot = (spot) => ({
+    type: UPDATE_SPOT,
+    payload: spot
+})
+//delete spot action
+const deleteSpot = (spotId) => ({
+    type: DELETE_SPOT,
+    payload: spotId
+})
 
 //thunks
 export const fetchSpots = () => async (dispatch) => {
@@ -41,7 +52,6 @@ export const fetchSpots = () => async (dispatch) => {
     // console.log("response", response)
     return response
   }
-
 //view spot details thunk
 export const fetchSpotDetails = (id) => async (dispatch) => {
     // console.log("test")
@@ -70,10 +80,9 @@ export const createSpot = (spotForm) => async (dispatch) => {
             throw error
         }
         // data.User = spotForm.user
-    } catch(e) {
-        return e
+    } catch(error) {
+        return error
     }
-    
 }
 //manage spots thunk
 export const manageSpotsThunk = () => async (dispatch) => {
@@ -81,7 +90,46 @@ export const manageSpotsThunk = () => async (dispatch) => {
     const data = await response.json()
     dispatch(manageSpots(data.Spots))
 }
-
+//update spot thunk
+export const updateSpotThunk = (id, updateSpotForm) => async (dispatch) => {
+    try {
+        const options = {
+            method: "PUT",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(updateSpotForm)
+        }
+        const response = await csrfFetch(`/api/spots/${id}`, options)
+        if(response.ok) {
+            const data = await response.json();
+            dispatch(updateSpot(data));
+            return data
+        } else {
+            const error = await response.json();
+            throw error
+        }
+    } catch(error) {
+        return error
+    }
+    
+}
+//delete spot thunk
+export const deleteSpotThunk = (spotId) => async (dispatch) => {
+    try {
+        console.log("DELETESPOTTHUNK TEST")
+        const option = {method: 'DELETE'}
+        const response = await csrfFetch(`/api/spots/${spotId}`, option)
+        console.log("DELETESPOT THUNK RESPONSE", response)
+        if(response.ok) {
+            const data = await response.json();
+            dispatch(deleteSpot(spotId))
+        } else {
+            const error = await response.json()
+            throw error
+        }
+    } catch(error) {
+        return error
+    }  
+}
 //initial state
 const initialState = {
     allSpots: [],
@@ -128,6 +176,20 @@ const spotsReducer = (state = initialState, action) => {
             for(let spot of action.payload) {
                 newState.byId[spot.id] = spot;
             }
+            return newState;
+        case UPDATE_SPOT:
+            // console.log("UPDATE_SPOT STATE", state)
+            newState = {...state};
+            // console.log("UPDATE_SPOT NEWSTATE", newState)
+            newState.byId = {...state.byId, [action.payload.id]: action.payload};
+            // console.log("UPDATE SPOT NEWSTATE2", newState)
+            return newState;
+        case DELETE_SPOT:
+            console.log("DELETE_SPOT TEST")
+            newState = { ...state };
+            newState.allSpots = newState.allSpots.filter(spot => spot.id !== action.payload);
+            delete newState.byId[action.payload];
+            newState.userSpots = newState.userSpots.filter(spot => spot.id !== action.payload);
             return newState;
         default:
             return state;

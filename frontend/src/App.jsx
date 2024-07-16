@@ -8,6 +8,8 @@ import SpotList from './components/SpotList/SpotList';
 import SpotDetail from './components/SpotDetail/SpotDetail';
 import CreateSpotForm from './components/CreateSpotForm/CreateSpotForm';
 import ManageSpots from './components/ManageSpots/ManageSpots';
+import UpdateSpotForm from './components/UpdateSpotForm/UpdateSpotForm';
+import './index.css';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -21,12 +23,23 @@ function Layout() {
 
   return (
     <>
-      <header>
-        <img src={logo} alt="Airbnb Logo" />
-      </header>
-      <Navigation isLoaded={isLoaded} />
-      {/* {isLoaded && <Outlet />} */}
-      <Outlet />
+      <div className='whole-display'>
+        <div className='top-container'>
+          <header>
+            <img className='airbnb-logo' src={logo} alt="Airbnb Logo" />
+          </header>
+          <div className='navigation'>
+            <Navigation isLoaded={isLoaded} />
+          </div>
+
+        </div>
+
+        {/* {isLoaded && <Outlet />} */}
+        <div className='content-container'>
+          <Outlet />
+        </div>
+      </div>
+
     </>
   );
 }
@@ -50,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: '/manage-spots',
         element: <ManageSpots />
+      },
+      {
+        path: '/spots/:id/edit',
+        element: <UpdateSpotForm />
       }
     ]
   }

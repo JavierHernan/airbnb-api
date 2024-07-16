@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createReview } from "../../store/reviews";
 
-function CreateReviewFormModal({spotId, onClose}) {
+function CreateReviewFormModal({spotId, onClose, onReviewSubmit}) {
     const dispatch = useDispatch();
     const [review, setReview] = useState('');
     const [stars, setStars] = useState(0);
     const [errors, setErrors] = useState([]);
+    // const sessionUser = useSelector(state => state.session.user);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,11 +17,14 @@ function CreateReviewFormModal({spotId, onClose}) {
         };
         const response = await dispatch(createReview(spotId, newReview));
         console.log("REVIEW MODAL RESPONSE", response)
-        // if(response.errors) {
-        //     setErrors(response.errors)
-        // } else {
-        //     onClose()
-        // }
+        if(response.errors) {
+            setErrors(response.errors)
+        } else {
+            console.log("NO ERRORS TEST")
+            onReviewSubmit(newReview)
+
+            // onClose()
+        }
     }
 
     return (
