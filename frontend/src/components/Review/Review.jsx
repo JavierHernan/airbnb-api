@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteReviewThunk } from '../../store/reviews';
 import DeleteReviewConfirmationModal from '../DeleteReviewConfirmationModal/DeleteReviewConfirmationModal';
 
-const ReviewComponent = ({ review }) => {
+const ReviewComponent = ({ review, sessionUser, onDelete }) => {
     const dispatch = useDispatch();
-    const sessionUser = useSelector(state => state.session.user);
+    // const sessionUser = useSelector(state => state.session.user);
     const [showModal, setShowModal] = useState(false);
 
     const handleDeleteClick = () => {
@@ -13,12 +13,15 @@ const ReviewComponent = ({ review }) => {
     };
 
     const handleConfirmDelete = () => {
-        dispatch(deleteReviewThunk(review.id)).then(() => {
-            setShowModal(false);
-        });
+        // dispatch(deleteReviewThunk(review.id)).then(() => {
+        //     setShowModal(false);
+        // });
+        onDelete(review.id); // Call the onDelete function with the review id
+        setShowModal(false);
     };
 
     const handleCloseModal = () => {
+        onDelete(review.id);
         setShowModal(false);
     };
 

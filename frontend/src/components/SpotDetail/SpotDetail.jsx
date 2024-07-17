@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchSpotDetails } from "../../store/spots";
 import { fetchReviews, createReview } from "../../store/reviews";
+import { deleteReviewThunk } from '../../store/reviews';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import React from "react";
@@ -60,6 +61,15 @@ function SpotDetail() {
         setShowModal(false);
     };
 
+    const handleReviewDelete = async (reviewId) => {
+        await dispatch(deleteReviewThunk(reviewId));
+        await dispatch(fetchSpotDetails(id)); // Fetch updated spot details
+        await dispatch(fetchReviews(id)); // Fetch updated reviews
+    };
+
+    // sorts reviews by newest
+    const sortedReviews = allDemReviews.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     return load ? (
         <>
             <div>
@@ -93,10 +103,13 @@ function SpotDetail() {
                 </div>
                 <div>
                     <h2>Reviews</h2>
-                    {
+                    {/* {
 
                         (sessionUser.id !== spot.ownerId && !allDemReviews.some(review => review.userId === sessionUser.id)) && (<button onClick={handlePostReview}>Post Your Review</button>) 
-                    }
+                    } */}
+                    {sessionUser && (sessionUser.id !== spot.ownerId && !allDemReviews.some(review => review.userId === sessionUser.id)) && (
+                        <button onClick={handlePostReview}>Post Your Review</button>
+                    )}
                     {
                         spot.numReviews > 0 && (
                             <div>
@@ -105,7 +118,7 @@ function SpotDetail() {
                             </div>
                         )
                     }
-                    {review.allReviews.length > 0 ? ( //SHOWS REVIEWS
+                    {/* {review.allReviews.length > 0 ? ( //SHOWS REVIEWS
                         review.allReviews.map((review, index) => (
                             // <div key={index}>
                             //     <p>{review.User.firstName} firstNameIndicator</p>
@@ -117,11 +130,25 @@ function SpotDetail() {
                                 key={index}
                                 review={review}
                                 sessionUser={sessionUser}
+                                onDelete={handleReviewDelete}
                             />
                         ))
                     ) : (
                         <p>Be the first to post a review!</p>
-                    )}            
+                    )}             */}
+                    {/* Newest Review is displayed */}
+                    {sortedReviews.length > 0 ? (
+                        sortedReviews.map((review, index) => (
+                            <ReviewComponent
+                                key={index}
+                                review={review}
+                                sessionUser={sessionUser}
+                                onDelete={handleReviewDelete}
+                            />
+                        ))
+                    ) : (
+                        <p>Be the first to post a review!</p>
+                    )}
                 </div>
             </div>
             {showModal && 
