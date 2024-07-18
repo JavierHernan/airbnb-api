@@ -9,6 +9,8 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import React from "react";
 import ReviewComponent from "../Review/Review";
 import CreateReviewFormModal from "../CreateReviewModal/CreateReviewFormModal";
+import './SpotDetail.css';
+
 
 function SpotDetail() {
     const dispatch = useDispatch();
@@ -73,9 +75,11 @@ function SpotDetail() {
     return load ? (
         <>
             <div>
-                <h1>{spot.name}</h1>
-                <div>{spot.city}, {spot.state}, {spot.country}</div>
-                <div>
+                <div className="spot-header-container">
+                    <h1>{spot.name}</h1>
+                    <div>{spot.city}, {spot.state}, {spot.country}</div>
+                </div>
+                <div className="spot-images-container">
                     <img src={spot.preview} />
                     <div>
                         {spot.SpotImages.map((image, index) => (
@@ -83,24 +87,32 @@ function SpotDetail() {
                         ))}
                     </div>
                 </div>
-                <p>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
-                <p>{spot.description}</p>
                 <div>
-                    <p>{spot.price} night</p>
-                    <button onClick={handleReserve}>Reserve</button>
+                    <div>
+                        <p>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
+                        <p>{spot.description}</p>
+                    </div>
+                    <div>
+                        <div>
+                            <p>{spot.price} night</p>
+                            <button onClick={handleReserve}>Reserve</button>
+                        </div>
+                        <div>
+                            <FontAwesomeIcon icon={faStar} /> 
+                            {spot.avgRating ? spot.avgRating : "New"} 
+                            {spot.numReviews > 0 && (
+                                <>
+                                    <p>-</p>
+                                    <p>
+                                        {spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}
+                                    </p>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    
                 </div>
-                <div>
-                    <FontAwesomeIcon icon={faStar} /> 
-                    {spot.avgRating ? spot.avgRating : "New"} 
-                    {spot.numReviews > 0 && (
-                        <>
-                            <p>-</p>
-                            <p>
-                                {spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}
-                            </p>
-                        </>
-                    )}
-                </div>
+                
                 <div>
                     <h2>Reviews</h2>
                     {/* {
