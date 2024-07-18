@@ -1,6 +1,4 @@
-import React from 'react';
 import './DeleteSpotConfirmationModal.css';
-
 
 const DeleteSpotConfirmationModal = ({show, onClose, onConfirm}) => {
     if (!show) {

@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { fetchSpotDetails } from "../../store/spots";
-import { fetchReviews, createReview } from "../../store/reviews";
+import { fetchReviews} from "../../store/reviews";
 import { deleteReviewThunk } from '../../store/reviews';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import React from "react";
 import ReviewComponent from "../Review/Review";
 import CreateReviewFormModal from "../CreateReviewModal/CreateReviewFormModal";
 import './SpotDetail.css';
@@ -14,7 +13,6 @@ import './SpotDetail.css';
 
 function SpotDetail() {
     const dispatch = useDispatch();
-    const navigate = useNavigate()
     const { id } = useParams();
     const [load, setLoad] = useState(false)
     const [showModal, setShowModal] = useState(false);

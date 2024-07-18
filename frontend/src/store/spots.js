@@ -120,7 +120,6 @@ export const deleteSpotThunk = (spotId) => async (dispatch) => {
         const response = await csrfFetch(`/api/spots/${spotId}`, option)
         console.log("DELETESPOT THUNK RESPONSE", response)
         if(response.ok) {
-            const data = await response.json();
             dispatch(deleteSpot(spotId))
         } else {
             const error = await response.json()

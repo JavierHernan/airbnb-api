@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteReviewThunk } from '../../store/reviews';
+import { useState } from 'react';
 import DeleteReviewConfirmationModal from '../DeleteReviewConfirmationModal/DeleteReviewConfirmationModal';
 
 const ReviewComponent = ({ review, sessionUser, onDelete }) => {
-    const dispatch = useDispatch();
     // const sessionUser = useSelector(state => state.session.user);
     const [showModal, setShowModal] = useState(false);
 

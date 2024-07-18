@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch} from 'react-redux';
 import { createSpot } from '../../store/spots';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +16,7 @@ const CreateSpotForm = () => {
     const [previewImage, setPreviewImage] = useState('');
     const [imageUrls, setImageUrls] = useState(['', '', '', '', '']);
     const [errors, setErrors] = useState([]);
-    const [load, setLoad] = useState(false)
+    // const [load, setLoad] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -102,7 +102,7 @@ const CreateSpotForm = () => {
                 </ul>
             )}
             <div>
-                <h2>Where's your place located?</h2>
+                <h2>{`Where's your place located?`}</h2>
                 <p>Guests will only get your exact address once they booked a reservation.</p>
                 <label>
                     Country
@@ -153,7 +153,7 @@ const CreateSpotForm = () => {
             </div>
             <div>
                 <h2>Create a title for your spot</h2>
-                <p>Catch guests' attention with a spot title that highlights what makes your place special.</p>
+                <p>{`Catch guests' attention with a spot title that highlights what makes your place special.`}</p>
                 <input 
                     type='text'
                     value={name}
