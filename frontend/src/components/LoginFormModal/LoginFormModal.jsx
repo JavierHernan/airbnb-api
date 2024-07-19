@@ -49,32 +49,34 @@ function LoginFormModal() {
 
   return (
     <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit" disabled={isButtonDisabled}>Log In</button>
-        <button type="button" onClick={handleDemoUserLogin}>Log in as Demo User</button>
-      </form>
+      <div className="login-modal">
+        <h1>Log In</h1>
+        <form onSubmit={handleSubmit}>
+          <label >
+            <input
+              type="text"
+              value={credential}
+              onChange={(e) => setCredential(e.target.value)}
+              placeholder='Username or Email'
+              required
+            />
+          </label>
+          <label className='password-label'>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder='Password'
+              required
+            />
+          </label>
+          {errors.credential && (
+            <p className="error-message">{errors.credential}</p>
+          )}
+          <button className='login-button' type="submit" disabled={isButtonDisabled}>Log In</button>
+          <button className='demo-button' type="button" onClick={handleDemoUserLogin}>Log in as Demo User</button>
+        </form>
+      </div>
     </>
   );
 }
