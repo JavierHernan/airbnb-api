@@ -1,0 +1,31 @@
+.review-container {
+    /* border: 1px solid black; */
+    margin-top: 15px;
+    width: 45%;
+}
+.review-name {
+    margin: 0px 0px 5px 0px;
+}
+.review-date-rating {
+    /* border: 1px solid blue; */
+    display: flex
+}
+.review-date {
+    /* border: 1px solid black; */
+    margin: 0px 5px 0px 0px;
+    color: #ff5a5f;
+}
+.review-rating {
+    /* border: 1px solid black; */
+    margin: 0;
+    color: #ff5a5f;
+} 
+.review {
+    margin: 10px 0px 10px 0px;
+}
+.review-delete {
+    width: 70px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    background-color: #ff5a5f;
+    color: white;
+}

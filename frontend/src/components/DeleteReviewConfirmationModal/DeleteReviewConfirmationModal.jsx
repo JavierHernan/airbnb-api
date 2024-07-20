@@ -1,5 +1,3 @@
-import React from 'react';
-
 const DeleteReviewConfirmationModal = ({ show, onClose, onConfirm, title, message, confirmText, cancelText }) => {
     if (!show) {
         return null;

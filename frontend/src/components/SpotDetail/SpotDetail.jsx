@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { fetchSpotDetails } from "../../store/spots";
-import { fetchReviews, createReview } from "../../store/reviews";
+import { fetchReviews} from "../../store/reviews";
 import { deleteReviewThunk } from '../../store/reviews';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import React from "react";
 import ReviewComponent from "../Review/Review";
 import CreateReviewFormModal from "../CreateReviewModal/CreateReviewFormModal";
 import './SpotDetail.css';
@@ -14,7 +13,6 @@ import './SpotDetail.css';
 
 function SpotDetail() {
     const dispatch = useDispatch();
-    const navigate = useNavigate()
     const { id } = useParams();
     const [load, setLoad] = useState(false)
     const [showModal, setShowModal] = useState(false);
@@ -33,7 +31,8 @@ function SpotDetail() {
     // if(spot === undefined) {
     //     navigate(`/`)
     // }
-
+    console.log("spot", spot)
+    console.log("spot.SpotImages", spot?.SpotImages)
     // console.log("spot123", spot)
     const review = useSelector(state => state?.reviews)
     // console.log("reviews REVIEW", review)
@@ -80,41 +79,52 @@ function SpotDetail() {
                     <div>{spot.city}, {spot.state}, {spot.country}</div>
                 </div>
                 <div className="spot-images-container">
-                    <img src={spot.preview} />
-                    <div>
-                        {spot.SpotImages.map((image, index) => (
-                            <img key={index} src={image} />
+                    <img className="preview-image" src={spot?.SpotImages[0].url} />
+                    <div className="other-images-container">
+                        {spot?.SpotImages.slice(1).map((image, index) => (
+                            <img className="other-image" key={index} src={image.url} />
                         ))}
                     </div>
                 </div>
-                <div>
-                    <div>
-                        <p>Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
-                        <p>{spot.description}</p>
+                <div className="spot-details-section-container">
+                    <div className="details-text-container">
+                        <p className="hosted">Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
+                        <p className="description">{spot.description}</p>
                     </div>
-                    <div>
-                        <div>
-                            <p>{spot.price} night</p>
-                            <button onClick={handleReserve}>Reserve</button>
-                        </div>
-                        <div>
-                            <FontAwesomeIcon icon={faStar} /> 
-                            {spot.avgRating ? spot.avgRating : "New"} 
-                            {spot.numReviews > 0 && (
-                                <>
-                                    <p>-</p>
-                                    <p>
-                                        {spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}
-                                    </p>
-                                </>
-                            )}
+                    <div className="details-reserve-container">
+                        <div className="details-box">
+                            <div className="details">
+                                <div className="details-inner">
+                                    <div className="reserve-price-container">
+                                        <p className="price-text">{spot.price} night</p>
+                                    </div>
+                                    <div className="reserve-review-container">
+                                        <FontAwesomeIcon icon={faStar} /> 
+                                        {spot.avgRating ? spot.avgRating : "New"} 
+                                        {spot.numReviews > 0 && (
+                                            <>
+                                                <p className="details-box-review-text">·</p>
+                                                <p className="details-box-review-text">
+                                                    {spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}
+                                                </p>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                            <div className="reserve-button-container">
+                            <button className="reserve-button" onClick={handleReserve}>Reserve</button>
+
+                            </div>
                         </div>
                     </div>
                     
                 </div>
                 
-                <div>
-                    <h2>Reviews</h2>
+                <div className="review-section-container">
+                    {/* <h2>Reviews</h2> */}
                     {/* {
 
                         (sessionUser.id !== spot.ownerId && !allDemReviews.some(review => review.userId === sessionUser.id)) && (<button onClick={handlePostReview}>Post Your Review</button>) 
@@ -124,7 +134,7 @@ function SpotDetail() {
                     )}
                     {
                         spot.numReviews > 0 && (
-                            <div>
+                            <div className="rating-reviews">
                                 <FontAwesomeIcon icon={faStar} />
                                 {spot.avgRating} · {spot.numReviews} {spot.numReviews === 1 ? 'Review' : 'Reviews'}
                             </div>
