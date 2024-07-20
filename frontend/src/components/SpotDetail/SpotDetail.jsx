@@ -26,7 +26,8 @@ function SpotDetail() {
         })
     }, [dispatch, id, showModal])
 
-    const spot = useSelector(state => state?.spots?.byId[id]) //write conditional if no spot, redirect to home
+    // const spot = useSelector(state => state?.spots?.byId[id]) //write conditional if no spot, redirect to home
+    const spot = useSelector(state => state?.spots?.allSpots[id])
     //if here
     // if(spot === undefined) {
     //     navigate(`/`)
@@ -75,40 +76,40 @@ function SpotDetail() {
         <>
             <div>
                 <div className="spot-header-container">
-                    <h1>{spot.name}</h1>
-                    <div>{spot.city}, {spot.state}, {spot.country}</div>
+                    {/* <h1>{spot.name}</h1> */}
+                    {/* <div>{spot.city}, {spot.state}, {spot.country}</div> */}
                 </div>
                 <div className="spot-images-container">
-                    <img className="preview-image" src={spot?.SpotImages[0].url} />
+                    <img className="preview-image" src={spot?.SpotImages[0]?.url} />
                     <div className="other-images-container">
                         {spot?.SpotImages.slice(1).map((image, index) => (
-                            <img className="other-image" key={index} src={image.url} />
+                            <img className="other-image" key={index} src={image?.url} />
                         ))}
                     </div>
                 </div>
                 <div className="spot-details-section-container">
                     <div className="details-text-container">
-                        <p className="hosted">Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p>
-                        <p className="description">{spot.description}</p>
+                        {/* <p className="hosted">Hosted by {spot.Owner.firstName} {spot.Owner.lastName}</p> */}
+                        {/* <p className="description">{spot.description}</p> */}
                     </div>
                     <div className="details-reserve-container">
                         <div className="details-box">
                             <div className="details">
                                 <div className="details-inner">
                                     <div className="reserve-price-container">
-                                        <p className="price-text">{spot.price} night</p>
+                                        {/* <p className="price-text">{spot.price} night</p> */}
                                     </div>
                                     <div className="reserve-review-container">
                                         <FontAwesomeIcon icon={faStar} /> 
-                                        {spot.avgRating ? spot.avgRating : "New"} 
-                                        {spot.numReviews > 0 && (
+                                        {/* {spot.avgRating ? spot.avgRating : "New"}  */}
+                                        {/* {spot.numReviews > 0 && (
                                             <>
                                                 <p className="details-box-review-text">·</p>
                                                 <p className="details-box-review-text">
                                                     {spot.numReviews} {spot.numReviews === 1 ? "Review" : "Reviews"}
                                                 </p>
                                             </>
-                                        )}
+                                        )} */}
                                     </div>
                                 </div>
                                 
@@ -129,7 +130,9 @@ function SpotDetail() {
 
                         (sessionUser.id !== spot.ownerId && !allDemReviews.some(review => review.userId === sessionUser.id)) && (<button onClick={handlePostReview}>Post Your Review</button>) 
                     } */}
-                    {sessionUser && (sessionUser.id !== spot.ownerId && !allDemReviews.some(review => review.userId === sessionUser.id)) && (
+
+                    {/* This works */}
+                    {/* {sessionUser && (sessionUser.id !== spot.ownerId && !allDemReviews.some(review => review.userId === sessionUser.id)) && (
                         <button onClick={handlePostReview}>Post Your Review</button>
                     )}
                     {
@@ -139,7 +142,9 @@ function SpotDetail() {
                                 {spot.avgRating} · {spot.numReviews} {spot.numReviews === 1 ? 'Review' : 'Reviews'}
                             </div>
                         )
-                    }
+                    } */}
+                    {/* this works */}
+
                     {/* {review.allReviews.length > 0 ? ( //SHOWS REVIEWS
                         review.allReviews.map((review, index) => (
                             // <div key={index}>

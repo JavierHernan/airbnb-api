@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
 import { useNavigate } from 'react-router-dom';
+import './ProfileButton.css';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -47,20 +48,23 @@ function ProfileButton({ user }) {
 
   return (
     <>
+    <div className='profile-modal-container'>
       <button onClick={toggleMenu}>
-        <FaUserCircle />
-      </button>
-      <ul className={ulClassName} ref={ulRef}>
-        <li>{user.username}</li>
-        <li>{user.firstName} {user.lastName}</li>
-        <li>{user.email}</li>
-        <li>
-          <button onClick={manageHandler}>Manage Spots</button>
+          <FaUserCircle />
+        </button>
+        <ul className={ulClassName} ref={ulRef}>
+          <li>{user.username}</li>
+          <li>{user.firstName} {user.lastName}</li>
+          <li>{user.email}</li>
+          <li>
+            <button onClick={manageHandler}>Manage Spots</button>
+            </li>
+          <li>
+            <button onClick={logout}>Log Out</button>
           </li>
-        <li>
-          <button onClick={logout}>Log Out</button>
-        </li>
-      </ul>
+        </ul>
+    </div>
+      
     </>
   );
 }

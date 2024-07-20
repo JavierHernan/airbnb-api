@@ -30,10 +30,12 @@ const CreateSpotForm = () => {
             name,
             price,
             previewImage,
-            imageUrls,
+            // imageUrls,
+            SpotImages: [previewImage, ...imageUrls],
             lat: -35.77673,
             lng: 6.31424
         };
+        console.log("spotInfo", spotInfo)
         const data = await dispatch(createSpot(spotInfo))
     
         console.log("dataCREATESPOTFORM", data)
@@ -84,7 +86,7 @@ const CreateSpotForm = () => {
                 setErrors(newErrors)
             }
         }  else {
-            navigate(`/spots/${data.id}`)
+            navigate(`/spots/${data.newSpot.newSpot.id}`)
         }
     }
     // console.log("ERRORS AFTER SETERRORS", errors)

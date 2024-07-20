@@ -18,7 +18,13 @@ function LoginFormModal() {
     } else {
       setIsButtonDisabled(true);
     }
-  }, [credential, password]);
+    const loginButton = document.querySelector('.login-button');
+  if (errors.credential) {
+    loginButton.classList.add('error');
+  } else {
+    loginButton.classList.remove('error');
+  }
+  }, [credential, password, errors.credential]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,7 +57,11 @@ function LoginFormModal() {
     <>
       <div className="login-modal">
         <h1>Log In</h1>
+        {errors.credential && (
+            <p className="error-message">{errors.credential}</p>
+          )}
         <form onSubmit={handleSubmit}>
+        
           <label >
             <input
               type="text"
@@ -70,11 +80,9 @@ function LoginFormModal() {
               required
             />
           </label>
-          {errors.credential && (
-            <p className="error-message">{errors.credential}</p>
-          )}
+          
           <button className='login-button' type="submit" disabled={isButtonDisabled}>Log In</button>
-          <button className='demo-button' type="button" onClick={handleDemoUserLogin}>Log in as Demo User</button>
+          <button className='demo-button' type="button" onClick={handleDemoUserLogin}>Demo User</button>
         </form>
       </div>
     </>

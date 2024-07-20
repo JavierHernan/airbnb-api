@@ -44,9 +44,6 @@ function Navigation({ isLoaded }) {
   return (
     <div className='nav-container'>
       <ul>
-        <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
         {isLoaded && sessionLinks}
       </ul>
     </div>

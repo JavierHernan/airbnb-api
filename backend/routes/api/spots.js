@@ -188,8 +188,10 @@ router.post(
     validateSpot,
     async (req, res) => {
         // const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.body;//
-        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, previewImage} = req.body;//
-
+        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, previewImage, SpotImages} = req.body;//
+        console.log("req.body",req.body)
+        console.log("previewImage", previewImage)
+        console.log("SpotImages", SpotImages)
         //get the owner id, which is current user
         const owner_Id = req.user.id;//
         if(name.length > 50) {
@@ -224,10 +226,12 @@ router.post(
             lng,
             name,
             description,
-            price
+            price,
+            SpotImages: [previewImage, ...SpotImages]
         })
-
-        return res.status(201).json(newSpot)
+        console.log("BACKEND NEW SPOT", newSpot)
+        // return res.status(201).json(newSpot)
+        return res.status(201).json({newSpot: {newSpot, SpotImages: {previewImage, ...SpotImages}}})
     }
 )
 
