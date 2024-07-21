@@ -9,7 +9,7 @@ function SpotList() {
   const spots = useSelector(state => state.spots.allSpots); //
   console.log("spots",spots)
 
-  const spotList = Object.values(spots) //converts spots object to array
+  // const spotList = Object.values(spots) //converts spots object to array
   // console.log("spotList", spotList)
 
   useEffect(() => {
@@ -19,7 +19,7 @@ function SpotList() {
 
   return (
     <div className="spot-list-container">
-      {spotList.map((spot) => (
+      {spots.map((spot) => (
         <SpotTile key={spot.id} spot={spot} />
       ))}
     </div>

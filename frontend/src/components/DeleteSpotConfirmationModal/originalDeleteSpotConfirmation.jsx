@@ -1,7 +1,9 @@
 import './DeleteSpotConfirmationModal.css';
 
-const DeleteSpotConfirmationModal = () => {
-
+const DeleteSpotConfirmationModal = ({show, onClose, onConfirm}) => {
+    if (!show) {
+        return null;
+    }
 
     return (
         <div className='delete-spot-outer'>

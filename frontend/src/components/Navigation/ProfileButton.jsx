@@ -44,25 +44,28 @@ function ProfileButton({ user }) {
     });
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const listContainer = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return (
     <>
     <div className='profile-modal-container'>
-      <button onClick={toggleMenu}>
+      <button className='profile-button' onClick={toggleMenu}>
           <FaUserCircle />
         </button>
-        <ul className={ulClassName} ref={ulRef}>
-          <li>{user.username}</li>
-          <li>{user.firstName} {user.lastName}</li>
-          <li>{user.email}</li>
-          <li>
-            <button onClick={manageHandler}>Manage Spots</button>
+        <div className='profile-modal'>
+          <ul id='first-3' className={listContainer} ref={ulRef}>
+            <li className='profile-modal-li'>Hello {user.firstName} {user.lastName}</li>
+            <li className='profile-modal-li'>{user.username}</li>
+            <li className='profile-modal-li'>{user.email}</li>
+            <li className='manage-container'>
+              <button className='manage-modal-button' onClick={manageHandler}>Manage Spots</button>
             </li>
-          <li>
-            <button onClick={logout}>Log Out</button>
-          </li>
-        </ul>
+            <li className='logout-container'>
+              <button className='logout-button' onClick={logout}>Log Out</button>
+            </li>
+          </ul>
+        </div>
+        
     </div>
       
     </>
