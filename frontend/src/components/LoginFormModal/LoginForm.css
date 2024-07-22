@@ -1,5 +1,6 @@
 .login-modal {
-    border: 5px solid black;
+    /* border: 5px solid black; */
+    /* border-radius: 15px; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,48 +14,53 @@
     padding-bottom: 10%;
 }
 
-h1 {
+.login-h1 {
     margin: 0px;
     font-size: 25px;
 }
 
-form {
+.login-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 10px 0px 0px 0px;
     /* border: 1px solid black; */
-    width: 80%;
+    width: 100%;
 }
 
-label {
+.login-label {
     width: 100%;
     /* border: 1px solid black; */
 }
-input {
-    width: 97%;
+.login-input {
+    width: 90%;
+    border: 2px solid black;
 }
 .password-label {
     margin: 3px 0px 0px 0px;
 }
 
-.login-modal label {
-    /* margin-bottom: 15px; */
-}
-
 .login-button {
     margin-top: 10px;
+    height: 35px;
+    width: 90%;
+    border: 2px solid black;
+    box-shadow: 2px 2px 1px black;
+}
+.login-button.error {
+    background-color: #2a515c;
+  color: white;
 }
 
 .demo-button {
-    margin-top: 20px;
+    margin: 15px 0px 0px 0px;
+    background: none;
+    border: none;
+    color: #ff5a5f;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-
-button {
-    margin: 0px;
-    padding: 0;
-}
 
 .error-message {
     color: red;

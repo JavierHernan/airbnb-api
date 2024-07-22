@@ -156,18 +156,15 @@ const spotsReducer = (state = initialState, action) => {
             // console.log("newState2", newState)
             return newState
         case SPOT_DETAILS:
-            // console.log("SPOT_DETALS TEST")
             newState = {...state}
-            // console.log("newState1", newState)
-            // console.log("action.payload", action.payload)
-            newState[action.payload.id] = action.payload
+            newState.allSpots = [action.payload]
             newState.byId = {...newState.byId, [action.payload.id]: action.payload}
-            // console.log("newState2", newState)
             return newState;
         case ADD_SPOT:
             newState = {... state};
             newState.allSpots = [action.payload, ...newState.allSpots];
             newState.byId = {...newState.byId, [action.payload.id]: action.payload}
+            console.log("ADDSPOT REDUCER NEWSTATE", newState)
             return newState
         case MANAGE_SPOTS:
             newState = {...state}

@@ -14,15 +14,15 @@ function SpotTile({spot}) {
         <>
         {/* title= spot.name is to be used in tooltip. tooltip being a css styling with text displayed onHover */}
             <div className="spot-tile-container" onClick={handleClick} title={spot.name}>
-                <img src={spot.url}  />
+                <img src={spot.previewImage}  />
                 <div className="spot-tile-content">
-                    <div>
+                    <div className="spot-tile-info">
                         <div>{spot.city}, {spot.state}</div>
                         <div>{spot.price} night</div>
                     </div>
-                    <div>
+                    <div className="spot-tile-rating">
                         <FontAwesomeIcon icon={faStar} />
-                        {spot.avgRating ? spot.avgRating : "New"}
+                        {spot.avgRating ? spot.avgRating.toFixed(1) : "New"}
                     </div>
                 </div>
             </div>

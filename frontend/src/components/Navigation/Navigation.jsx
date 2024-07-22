@@ -13,42 +13,42 @@ function Navigation({ isLoaded }) {
   if (sessionUser) {
     sessionLinks = (
       <>
-        <li>
-          <NavLink to="/spots/new">Create a New Spot</NavLink>
-        </li>
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
+        <div className='nav-options'>
+          <div className='create-new-link'>
+            <NavLink className="navlink" to="/spots/new">Create a New Spot</NavLink>
+          </div>
+          <div className='profile-button'>
+            <ProfileButton user={sessionUser} />
+          </div>
+        </div>
       </>
-      
     );
   } else {
     sessionLinks = (
       <>
-        <li>
-          <OpenModalButton
-            buttonText="Log In"
-            modalComponent={<LoginFormModal />}
-          />
-        </li>
-        <li>
-          <OpenModalButton
-            buttonText="Sign Up"
-            modalComponent={<SignupFormModal />}
-          />
-        </li>
+        <div className='no-user-options'>
+          <div className='modal-container'>
+            <OpenModalButton
+              buttonText="Log In"
+              modalComponent={<LoginFormModal />}
+            />
+          </div>
+          <div className='modal-container'>
+            <OpenModalButton
+              buttonText="Sign Up"
+              modalComponent={<SignupFormModal />}
+            />
+          </div>
+        </div>
       </>
     );
   }
 
   return (
     <div className='nav-container'>
-      <ul>
-        <li>
-          <NavLink to="/">Home</NavLink>
-        </li>
+      <div>
         {isLoaded && sessionLinks}
-      </ul>
+      </div>
     </div>
     
   );

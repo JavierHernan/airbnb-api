@@ -60,6 +60,16 @@ module.exports = {
       spotId: 3,
       preview: true
     },
+    {
+      url: 'https://res.cloudinary.com/liaison-inc/image/upload/f_auto/q_auto,w_1200/v1681302127/content/homeguide/homeguide-red-barn-on-rural-property-in-New-England.jpg',
+      spotId: 4,
+      preview: true
+    },
+    {
+      url: 'https://res.cloudinary.com/liaison-inc/image/upload/f_auto/q_auto,w_1200/v1681302127/content/homeguide/homeguide-red-barn-on-rural-property-in-New-England.jpg',
+      spotId: 4,
+      preview: false
+    },
    ], {validate: true})
   },
 

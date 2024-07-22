@@ -1,10 +1,9 @@
 /* TODO: Add sitewide styles */
 body {
     margin: 0px;
+    font-family: 'Arial', 'Helvetica', sans-serif;
 }
 .whole-display {
-    border: 1px solid black;
-    /* height: 100%; */
     display: flex;
     flex-direction: column;
     min-height: 100vh
@@ -16,22 +15,21 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* height: 65px; */
 }
 .airbnb-logo {
-    height: 25px;
+    height: 50px;
 }
 .navigation {
-    /* height: 40px; */
-    border: 1px solid black;
+    height: 70px;
+    margin-right: 20px;
 }
 .content-container {
     border: 1px solid black;
     padding-left: 70px;
     padding-right: 70px;
-    flex: 1; /* Ensures it takes up the remaining space */
-    overflow: auto; /* Ensures any overflow content is scrollable */
+    flex: 1; 
+    overflow: auto; 
     display: flex;
-    flex-direction: column; /* Ensures the children are arranged in a column */
+    flex-direction: column; 
     justify-content: flex-start;
 }

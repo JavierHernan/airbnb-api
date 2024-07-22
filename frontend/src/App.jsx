@@ -9,6 +9,8 @@ import SpotDetail from './components/SpotDetail/SpotDetail';
 import CreateSpotForm from './components/CreateSpotForm/CreateSpotForm';
 import ManageSpots from './components/ManageSpots/ManageSpots';
 import UpdateSpotForm from './components/UpdateSpotForm/UpdateSpotForm';
+import { NavLink } from 'react-router-dom';
+
 import './index.css';
 
 function Layout() {
@@ -26,10 +28,12 @@ function Layout() {
       <div className='whole-display'>
         <div className='top-container'>
           <header>
-            <img className='airbnb-logo' src={logo} alt="Airbnb Logo" />
+          <NavLink to="/"><img className='airbnb-logo' src={logo} alt="Airbnb Logo" /></NavLink>
+            
           </header>
           <div className='navigation'>
             <Navigation isLoaded={isLoaded} />
+
           </div>
 
         </div>

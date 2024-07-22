@@ -186,48 +186,130 @@ router.post(
     '/',
     requireAuth,
     validateSpot,
-    async (req, res) => {
-        // const {id, ownerId, address, city, state, country, lat, lng, name, description, price} = req.body;//
-        const {id, ownerId, address, city, state, country, lat, lng, name, description, price, previewImage} = req.body;//
-
-        //get the owner id, which is current user
-        const owner_Id = req.user.id;//
-        if(name.length > 50) {
-            return res.status(400).json({
-                message: "Name must be less than 50 characters",
-            })
-        }
-        // if(!name) {
-        //     res.status(400).json({message: "Bad request.", errors: "Name is required"})
-        // }
-        const spotExists = await Spot.findOne({
-            where: {
+    async (req, res, next) => {
+        try {
+            const {
+                country,
                 address,
                 city,
                 state,
-                country
+                description,
+                name,
+                price,
+                lat,
+                lng,
+                previewImage,
+                img1,
+                img2,
+                img3,
+                img4,
+                img5,
+            } = req.body;
+            
+            //get the owner id, which is current user
+            const ownerId = req.user.id;//
+            if(name.length > 50) {
+                return res.status(400).json({
+                    message: "Name must be less than 50 characters",
+                })
             }
-        })
-        if (spotExists) {
-            return res.status(400).json({
-                message: "This Spot already exists",
-            });
+    
+            const spotExists = await Spot.findOne({
+                where: {
+                    address,
+                    city,
+                    state,
+                    country
+                }
+            })
+            if (spotExists) {
+                return res.status(400).json({
+                    message: "This Spot already exists",
+                });
+            }
+            const newSpot = await Spot.create({
+                ownerId: ownerId,
+                address,
+                city,
+                state,
+                country,
+                lat,
+                lng,
+                name,
+                description,
+                price,
+            })
+    
+            if(newSpot) {
+                //create images
+                if(previewImage) {
+                    const spotPreviewImage = await Spot_Image.create({
+                        url: previewImage,
+                        preview: true,
+                        spotId: newSpot.id,
+                    });
+                    const spotImages = [];
+                    if(img1){
+                        const spotimg1 = await Spot_Image.create({
+                            url: img1,
+                            preview: false,
+                            spotId: newSpot.id,
+                        });
+                        spotImages.push(spotimg1)
+                    }
+                    if(img2){
+                        const spotimg2 = await Spot_Image.create({
+                            url: img2,
+                            preview: false,
+                            spotId: newSpot.id,
+                        });
+                        spotImages.push(spotimg2)
+                    }
+                    if(img3){
+                        const spotimg3 = await Spot_Image.create({
+                            url: img3,
+                            preview: false,
+                            spotId: newSpot.id,
+                        });
+                        spotImages.push(spotimg3)
+                    }
+                    if(img4){
+                        const spotimg4 = await Spot_Image.create({
+                            url: img4,
+                            preview: false,
+                            spotId: newSpot.id,
+                        });
+                        spotImages.push(spotimg4)
+                    }
+                    if(img5){
+                        const spotimg5 = await Spot_Image.create({
+                            url: img5,
+                            preview: false,
+                            spotId: newSpot.id,
+                        });
+                        spotImages.push(spotimg5)
+                    }
+    
+                    const {ownerId, ...spotKeys} = await newSpot.toJSON();
+                    const createdUser = await User.findByPk(ownerId);
+    
+                    res.status(201)
+                    return res.json({
+                        Owner: createdUser,
+                        ...spotKeys,
+                        previewImage,
+                        SpotImages: [
+                            previewImage,
+                            ...spotImages
+                        ]
+                    })
+                }
+            }
+            res.status(500);
+            throw new Error("Internal Server Error")
+        } catch (e) {
+            next(e)
         }
-        const newSpot = await Spot.create({
-            id,
-            ownerId: owner_Id,//
-            address,
-            city,
-            state,
-            country,
-            lat,
-            lng,
-            name,
-            description,
-            price
-        })
-
-        return res.status(201).json(newSpot)
     }
 )
 

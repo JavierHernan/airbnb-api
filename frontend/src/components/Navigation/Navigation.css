@@ -1,6 +1,27 @@
-li {
-    list-style-type: none;
-}
 .nav-container {
-    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+.nav-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+}
+.navlink {
+    text-decoration: none;
+}
+.no-user-options {
+    display: flex;
+}
+.modal-container {
+    width: 150px;
+}
+.modal-container button {
+    height: 35px;
+    width: 125px;
+    font-size: 20px;
+    background-color: #ff5a5f;
+    color: white;
 }
