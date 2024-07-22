@@ -1,26 +1,32 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import DeleteReviewConfirmationModal from '../DeleteReviewConfirmationModal/DeleteReviewConfirmationModal';
 import './Review.css';
 
 
 const ReviewComponent = ({ review, sessionUser, onDelete }) => {
     // const sessionUser = useSelector(state => state.session.user);
+    const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
 
     const handleDeleteClick = () => {
         setShowModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        // dispatch(deleteReviewThunk(review.id)).then(() => {
+    const handleConfirmDelete = async () => {
+        // await dispatch(onDelete(review.id)).then(() => {
         //     setShowModal(false);
         // });
+        await onDelete(review.id).then(() => {
+            setShowModal(false)
+        })
+        // await dispatch(deleteReviewThunk(review.id));
         onDelete(review.id); // Call the onDelete function with the review id
         setShowModal(false);
     };
 
     const handleCloseModal = () => {
-        onDelete(review.id);
+        // onDelete(review.id);
         setShowModal(false);
     };
 

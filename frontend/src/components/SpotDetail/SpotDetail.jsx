@@ -37,9 +37,9 @@ function SpotDetail() {
             await dispatch(fetchReviews(id))
             setLoad(true)
         }
-        if(true) {
+        // if(true) {
             getData()
-        }
+        // }
 
     }, [dispatch, load])
 
