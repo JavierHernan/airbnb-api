@@ -28,13 +28,13 @@ const ReviewComponent = ({ review, sessionUser, onDelete }) => {
         <>
             <div className='review-container'>
                 <div className="review-tile">
-                <p className='review-name'>{review?.User?.firstName} firstNameIndicator</p>
+                <p className='review-name'>{review?.User?.firstName}</p>
                 <div className='review-date-rating'>
                     <p className='review-date'>{new Date(review?.createdAt)?.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}</p>
                     <p className='review-rating'>{review?.stars} stars</p>
                 </div>
                 
-                <p className='review'>{review?.review} reviewIndicator</p>
+                <p className='review'>{review?.review}</p>
                 
                 {sessionUser && sessionUser?.id === review?.userId && (
                     <button className='review-delete' onClick={handleDeleteClick}>Delete</button>

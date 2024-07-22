@@ -1,3 +1,6 @@
 .delete-spot-outer {
     border: 1px solid black;
+    height: 300px;
+    width: 300px;
+    background-color: white;
 }

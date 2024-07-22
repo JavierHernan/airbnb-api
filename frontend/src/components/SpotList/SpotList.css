@@ -8,7 +8,7 @@
     gap: 25px;
     padding-top: 20px;
     padding-bottom: 20px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
   }
 
   @media (min-width: 800px) {
@@ -23,7 +23,7 @@
     }
   }
   
-  @media (min-width: 1300px) {
+  @media (min-width: 1440px) {
     .spot-list-container {
       grid-template-columns: repeat(4, 1fr);
     }

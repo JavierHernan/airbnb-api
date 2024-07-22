@@ -17,7 +17,8 @@
 }
 .preview-image {
     /* border: 3px solid yellow; */
-    max-width: 100%;
+    /* max-width: 100%; */
+    max-width: 562px;
     height: auto;
     flex: 1;
     padding-right: 3px;
@@ -124,6 +125,14 @@
     border-top: 1px solid black;
     margin-top: 20px;
     padding-top: 15px;
+}
+.post-review-button {
+    /* border: 1px solid black; */
+    margin-bottom: 15px;
+    width: 125px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    background-color: #ff5a5f;
+    color: white;
 }
 .rating-reviews {
     /* border: 1px solid black; */

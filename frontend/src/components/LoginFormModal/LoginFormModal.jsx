@@ -18,7 +18,13 @@ function LoginFormModal() {
     } else {
       setIsButtonDisabled(true);
     }
-  }, [credential, password]);
+    const loginButton = document.querySelector('.login-button');
+  if (errors.credential) {
+    loginButton.classList.add('error');
+  } else {
+    loginButton.classList.remove('error');
+  }
+  }, [credential, password, errors.credential]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,10 +56,15 @@ function LoginFormModal() {
   return (
     <>
       <div className="login-modal">
-        <h1>Log In</h1>
-        <form onSubmit={handleSubmit}>
-          <label >
+        <h1 className='login-h1'>Log In</h1>
+        {errors.credential && (
+            <p className="error-message">{errors.credential}</p>
+          )}
+        <form className='login-form' onSubmit={handleSubmit}>
+        
+          <label className='login-label'>
             <input
+              className='login-input'
               type="text"
               value={credential}
               onChange={(e) => setCredential(e.target.value)}
@@ -61,8 +72,9 @@ function LoginFormModal() {
               required
             />
           </label>
-          <label className='password-label'>
+          <label className='password-label login-label'>
             <input
+              className='login-input'
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -70,11 +82,9 @@ function LoginFormModal() {
               required
             />
           </label>
-          {errors.credential && (
-            <p className="error-message">{errors.credential}</p>
-          )}
+          
           <button className='login-button' type="submit" disabled={isButtonDisabled}>Log In</button>
-          <button className='demo-button' type="button" onClick={handleDemoUserLogin}>Log in as Demo User</button>
+          <button className='demo-button' type="button" onClick={handleDemoUserLogin}>Demo User</button>
         </form>
       </div>
     </>

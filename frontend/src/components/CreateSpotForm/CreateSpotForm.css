@@ -1,0 +1,110 @@
+.create-form-container {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh;  */
+}
+.create-line-break {
+    margin-top: 15px;
+}
+.create-form {
+    /* border: 1px solid black; */
+    width: 400px;
+}
+.create-title-h1 {
+    font-size: 25px;
+}
+.create-second-title {
+    font-size: 20px;
+}
+.create-country-label {
+    /* border: 1px solid black; */
+    display: block;
+}
+.create-country-label input {
+    width: 100%;
+}
+.create-address-label {
+    /* border: 1px solid black; */
+    display: block;
+}
+.create-address-label input {
+    width: 100%;
+}
+.create-city-state-labels {
+    /* border: 1px solid black; */
+    display: flex;
+    /* justify-content: space-between; */
+}
+.create-country-label,
+.create-address-label,
+.create-city-label,
+.create-state-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.create-country-label input,
+.create-address-label input{
+    width: 100%;
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    box-sizing: border-box;
+}
+.create-city-label {
+    width: 60%;
+    margin-right: 5px;
+}
+.create-city-label input{
+    width: 100%;
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    box-sizing: border-box;
+}
+.create-state-label {
+    width: 40%;
+}
+.create-state-label input {
+    width: 100%;
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    box-sizing: border-box;
+}
+.create-line-break {
+    border-top: 1px solid black;
+}
+.create-textarea {
+    height: 80px;
+    width: 99%;
+}
+.create-name-input {
+    width: 98%;
+}
+.create-price-input {
+    margin-left: 4px;
+    width: 94%;
+}
+.create-image-container {
+    display: flex;
+    flex-direction: column;
+}
+.create-image-input {
+    margin-bottom: 15px;
+}
+/* .create-image-container input {
+    margin-bottom: 15px;
+} */
+.create-submit-button-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.create-submit-button {
+    height: 30px;
+    width: 100px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    background-color: #ff5a5f;
+    color: white;
+}

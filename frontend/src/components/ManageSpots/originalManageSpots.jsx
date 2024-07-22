@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -73,10 +74,18 @@ const ManageSpots = () => {
                                         </div>
                                         <div className='manage-ratings'>
                                             <FontAwesomeIcon icon={faStar} />
-                                            {spot.avgRating ? spot.avgRating.toFixed(1) : "New"}
+                                            {spot.avgRating ? spot.avgRating : "New"}
                                         </div>
                                     </div>
                                     <div className='manage-buttons-container'>
+                                        <OpenModalButton
+                                            buttonText="Delete"
+                                            modalComponent={<DeleteSpotConfirmationModal
+                                                // show={showModal} 
+                                                onClose={closeModal}
+                                                onConfirm={deleteConfirm}
+                                            />}
+                                        />
                                         <button className='manage-buttons' onClick={(e) => { e.stopPropagation(); update(spot.id); }}>Update</button>
                                         <button className='manage-buttons manage-delete' onClick={(e) => { e.stopPropagation(); deleteHandler(spot.id); }}>Delete</button>
                                     </div>
@@ -84,7 +93,11 @@ const ManageSpots = () => {
                                 <div className='manage-buttons-container'>
                                         <OpenModalButton
                                             buttonText="Delete"
-                                            modalComponent={<DeleteSpotConfirmationModal />}
+                                            modalComponent={<DeleteSpotConfirmationModal
+                                                // show={showModal} 
+                                                // onClose={closeModal}
+                                                // onConfirm={deleteConfirm}
+                                            />}
                                         />
                                         <button className='manage-buttons' onClick={(e) => { e.stopPropagation(); update(spot.id); }}>Update</button>
                                         <button className='manage-buttons manage-delete' onClick={(e) => { e.stopPropagation(); deleteHandler(spot.id); }}>Delete</button>

@@ -1,0 +1,98 @@
+.update-form-container {
+    display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh;  */
+}
+.update-line-break {
+    margin-top: 15px;
+}
+.update-form {
+    /* border: 1px solid black; */
+    width: 400px;
+}
+.update-title-h1 {
+    font-size: 25px;
+}
+.update-second-title {
+    font-size: 20px;
+}
+.update-country-label {
+    /* border: 1px solid black; */
+    display: block;
+}
+.update-country-label input {
+    width: 100%;
+}
+.update-address-label {
+    /* border: 1px solid black; */
+    display: block;
+}
+.update-address-label input {
+    width: 100%;
+}
+.update-city-state-labels {
+    /* border: 1px solid black; */
+    display: flex;
+    /* justify-content: space-between; */
+}
+.update-country-label,
+.update-address-label,
+.update-city-label,
+.update-state-label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.update-country-label input,
+.update-address-label input{
+    width: 100%;
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    box-sizing: border-box;
+}
+.update-city-label {
+    width: 60%;
+    margin-right: 5px;
+}
+.update-city-label input{
+    width: 100%;
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    box-sizing: border-box;
+}
+.update-state-label {
+    width: 40%;
+}
+.update-state-label input {
+    width: 100%;
+    /* padding: 5px; */
+    /* margin-top: 5px; */
+    box-sizing: border-box;
+}
+.update-line-break {
+    border-top: 1px solid black;
+}
+.update-textarea {
+    height: 80px;
+    width: 99%;
+}
+.update-name-input {
+    width: 98%;
+}
+.update-price-input {
+    margin-left: 4px;
+    width: 95%;
+}
+.update-submit-button-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.update-submit-button {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    background-color: #ff5a5f;
+    color: white;
+}
