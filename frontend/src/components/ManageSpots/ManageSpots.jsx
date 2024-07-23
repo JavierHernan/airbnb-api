@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
+// import { useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteSpotThunk, manageSpotsThunk } from '../../store/spots';
+// import { manageSpotsThunk } from '../../store/spots';
+
 
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import DeleteSpotConfirmationModal from '../DeleteSpotConfirmationModal/DeleteSpotConfirmationModal';
 
-import DeleteSpotConfirmationModal from '../DeleteReviewConfirmationModal/DeleteReviewConfirmationModal';
 import './ManageSpots.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -17,7 +21,7 @@ const ManageSpots = () => {
     console.log("spots", spots)
     console.log("spots.length", spots.length)
     const sessionUser = useSelector(state => state.session.user)
-    const [showModal, setShowModal] = useState(false);
+    // const [showModal, setShowModal] = useState(false);
     const [deleteSpot, setDeleteSpot] = useState(null);
 
     useEffect(() => {
@@ -29,19 +33,25 @@ const ManageSpots = () => {
     const update = (spotId) => {
         navigate(`/spots/${spotId}/edit`);
     }
-    const deleteHandler = (spotId) => {
-        setDeleteSpot(spotId)
-        setShowModal(true)
-    }
-    const deleteConfirm = () => {
-        dispatch(deleteSpotThunk(deleteSpot)).then(() => {
-            setShowModal(false)
+    // const deleteHandler = (spotId) => {
+    //     setDeleteSpot(spotId)
+    //     setShowModal(true)
+    // }
+    const deleteConfirm = async () => {
+        if(deleteSpot) {
+            // await dispatch(deleteSpotThunk(deleteSpot)).then(() => {
+            //     setShowModal(false)
+            //     setDeleteSpot(null);
+            //     dispatch(manageSpotsThunk())
+            // })
+            await dispatch(deleteSpotThunk(deleteSpot));
             setDeleteSpot(null);
-            dispatch(manageSpotsThunk())
-        })
+            dispatch(manageSpotsThunk());
+        }
+        
     }
     const closeModal = () => {
-        setShowModal(false)
+        // setShowModal(false)
         setDeleteSpot(null)
     }
 
@@ -62,7 +72,7 @@ const ManageSpots = () => {
                 ) : (
                     <div className="manage-list-container">
                         {spots.map(spot => (
-                            <div>
+                            <div key={spot.id}>
                                 <div className="manage-tile-container" key={spot.id} onClick={() => navigate(`/spots/${spot.id}`)}>
                                     <img className='manage-img' src={spot.previewImage} alt={spot.name} />
                                     <div className="manage-tile-content">
@@ -76,30 +86,42 @@ const ManageSpots = () => {
                                             {spot.avgRating ? spot.avgRating.toFixed(1) : "New"}
                                         </div>
                                     </div>
-                                    <div className='manage-buttons-container'>
-                                        <button className='manage-buttons' onClick={(e) => { e.stopPropagation(); update(spot.id); }}>Update</button>
-                                        <button className='manage-buttons manage-delete' onClick={(e) => { e.stopPropagation(); deleteHandler(spot.id); }}>Delete</button>
-                                    </div>
+                                    
                                 </div>
                                 <div className='manage-buttons-container'>
+                                        <button className='manage-buttons' onClick={(e) => { e.stopPropagation(); update(spot.id); }}>Update</button>
                                         <OpenModalButton
                                             buttonText="Delete"
-                                            modalComponent={<DeleteSpotConfirmationModal />}
+                                            className="manage-buttons"
+                                            modalComponent={<DeleteSpotConfirmationModal
+                                                                
+                                                                onConfirm={deleteConfirm}
+                                                                onClose={closeModal}
+                                                            />}
                                         />
-                                        <button className='manage-buttons' onClick={(e) => { e.stopPropagation(); update(spot.id); }}>Update</button>
-                                        <button className='manage-buttons manage-delete' onClick={(e) => { e.stopPropagation(); deleteHandler(spot.id); }}>Delete</button>
-                                </div>
+                                        {/* <button className='manage-buttons manage-delete' onClick={(e) => { e.stopPropagation(); deleteHandler(spot.id); }}>Delete</button> */}
+                                    </div>
+                                
                             </div>
                             
                         ))}
                     </div>
                 )}
             </div>
-            <DeleteSpotConfirmationModal 
+
+            {/* <div className='manage-buttons-container'>
+                                        <OpenModalButton
+                                            buttonText="Delete"
+                                            modalComponent={<DeleteSpotConfirmationModal />}
+                                        />
+                                         <button className='manage-buttons' onClick={(e) => { e.stopPropagation(); update(spot.id); }}>Update</button> 
+                                        <button className='manage-buttons manage-delete' onClick={(e) => { e.stopPropagation(); deleteHandler(spot.id); }}>Delete</button> 
+                                </div> */}
+            {/* <DeleteSpotConfirmationModal 
                 show={showModal}
                 onClose={closeModal}
                 onConfirm={deleteConfirm}
-            />
+            /> */}
 
         </>
     )

@@ -70,6 +70,21 @@ const CreateSpotForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const newErrors = [];
+        if (!spotForm.country) newErrors.push("Country is required");
+        if (!spotForm.address) newErrors.push("Street Address is required");
+        if (!spotForm.city) newErrors.push("City is required");
+        if (!spotForm.state) newErrors.push("State is required");
+        if (!spotForm.description || spotForm.description.length < 30) newErrors.push("Description needs 30 or more characters");
+        if (!spotForm.name) newErrors.push("Name of your spot is required");
+        if (!spotForm.price) newErrors.push("Price per night is required");
+        if (!spotForm.previewImage) newErrors.push("Preview Image URL is required");
+
+        if (newErrors.length) {
+            setErrors(newErrors);
+            return;
+        }
+
         const data = await dispatch(createSpot(spotForm))
         navigate(`/spots/${data.id}`);
        
