@@ -33,9 +33,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     description: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(500),
       validate: {
-        len: [3, 255]
+        len: [3, 500]
       }
     },
     price: DataTypes.FLOAT,
