@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import DeleteReviewConfirmationModal from '../DeleteReviewConfirmationModal/DeleteReviewConfirmationModal';
 import './Review.css';
 
 
 const ReviewComponent = ({ review, sessionUser, onDelete }) => {
     // const sessionUser = useSelector(state => state.session.user);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
 
     const handleDeleteClick = () => {
