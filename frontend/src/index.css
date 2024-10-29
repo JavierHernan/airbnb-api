@@ -18,6 +18,20 @@ body {
 }
 .airbnb-logo {
     height: 50px;
+    border-radius: 5px;
+}
+.airbnb-logo-container {
+    /* border: 1px solid black; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(226,102,101);
+    border-radius: 5px;
+    padding: 0px 5px 0px 5px
+}
+.clone-text {
+    font-size: 30px;
+    color: rgb(255,255,255);
 }
 .navigation {
     height: 70px;
