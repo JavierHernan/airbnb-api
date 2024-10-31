@@ -30,7 +30,7 @@ function Layout() {
           <header>
             <div className='airbnb-logo-container'>
               <NavLink to="/"><img className='airbnb-logo' src={logo} alt="Airbnb Logo" /></NavLink>
-              <div className='clone-text'>//Clone</div>
+              <div className='clone-text'>Clone</div>
             </div>
           </header>
           <div className='navigation'>
