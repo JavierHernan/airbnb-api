@@ -21,7 +21,7 @@ function SpotTile({spot}) {
                         <div>{spot.price} night</div>
                     </div>
                     <div className="spot-tile-rating">
-                        <FontAwesomeIcon icon={faStar} />
+                        <FontAwesomeIcon className="star" icon={faStar} />
                         {spot.avgRating ? spot.avgRating.toFixed(1) : "New"}
                     </div>
                 </div>
