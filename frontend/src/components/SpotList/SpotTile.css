@@ -38,9 +38,6 @@
   .spot-tile-container:hover {
     transform: scale(1.02);
   }
-  .spot-tile-rating {
-    
-  }
   .star {
     color: rgb(226, 102, 101);
     margin-right: 3px;
