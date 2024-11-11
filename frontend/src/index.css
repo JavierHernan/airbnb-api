@@ -6,10 +6,11 @@ body {
 .whole-display {
     display: flex;
     flex-direction: column;
-    min-height: 100vh
+    min-height: 100vh;
+    background-color: #f0f0f0;
 }
 .top-container {
-    border: 1px solid black;
+    /* border: 1px solid black; */
     padding-left: 15px;
     padding-right: 15px;
     display: flex;
@@ -38,7 +39,7 @@ body {
     margin-right: 20px;
 }
 .content-container {
-    border: 1px solid black;
+    border-top: 3px solid rgb(226,102,101);
     padding-left: 70px;
     padding-right: 70px;
     flex: 1; 

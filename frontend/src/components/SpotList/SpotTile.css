@@ -7,13 +7,16 @@
   flex-direction: column;
   justify-content: space-between;
   /* background-color: #f9f9f9; */
-  border: 1px solid #ddd;
+  /* border: 3px solid #ddd; */
+  border: 3px solid rgb(226, 102, 101);
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.2s;
   cursor: pointer;
-  height: 282px;
-  width: 298px;
+  /* height: 282px;
+  width: 298px; */
+  height: 295px;
+    width: 310px;
 }
 
 .spot-tile-container img {
@@ -21,15 +24,21 @@
     /* height: auto; */
     height: 212px;
     display: block;
+    border-bottom: 2px solid rgb(226, 102, 101);
   }
 
   .spot-tile-content { 
     display: flex;
     justify-content: space-between;
     padding: 0px 16px 16px 5px;
-    background-color: #fff;
+    /* background-color: #fff; */
+    background-color: #f0f0f0;
   }
 
   .spot-tile-container:hover {
     transform: scale(1.02);
+  }
+  .star {
+    color: rgb(226, 102, 101);
+    margin-right: 3px;
   }
