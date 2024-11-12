@@ -70,6 +70,46 @@ module.exports = {
       spotId: 4,
       preview: false
     },
+    {
+      url: 'https://prod.rockmedialibrary.com/api/public/content/c75dce0bc2714ce8b23c20fb49628bfa?v=5fdae3b6',
+      spotId: 5,
+      preview: false
+    },
+    {
+      url: 'https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/home-improvement/wp-content/uploads/2022/07/Paris_Exterior_4-Edit-e1714649473120.png',
+      spotId: 5,
+      preview: false
+    },
+    {
+      url: 'https://wp-tid.zillowstatic.com/52/GettyImages-175259322-1_1200-1-d9e272-1024x805.jpg',
+      spotId: 6,
+      preview: false
+    },
+    {
+      url: 'https://cdn.houseplansservices.com/content/h0rig2dbr8vsg0fcgqco7acmul/w991x660.jpg?v=9',
+      spotId: 6,
+      preview: false
+    },
+    {
+      url: 'https://sgluxuryhomes.com.sg/wp-content/uploads/private-house.jpeg.webp',
+      spotId: 7,
+      preview: false
+    },
+    {
+      url: 'https://wp.zillowstatic.com/trulia/wp-content/uploads/sites/1/2017/08/stonemansion.jpg',
+      spotId: 8,
+      preview: false
+    },
+    {
+      url: 'https://www.dreamtinyliving.com/wp-content/uploads/2024/02/Small-House-Design-Idea-63-Sqft-1.jpg',
+      spotId: 9,
+      preview: false
+    },
+    {
+      url: 'https://static.homeguide.com/assets/images/content/homeguide-typical-house-in-suburban-Los-Angeles-California.jpg',
+      spotId: 9,
+      preview: false
+    },
    ], {validate: true})
   },
 
